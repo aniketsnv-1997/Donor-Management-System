@@ -41,9 +41,9 @@ def create_tables():
 
 jwt = JWTManager(app)
 
-
+# Used to add some more values and functionalities to the existing JWT token, like admin and user access
 @jwt.user_claims_loader
-def add_claims_to_jwt(identity):  # Used to add some more values to the access JWT token
+def add_claims_to_jwt(identity):
     # TODO: Generalizing the if condition to a database query to fetch id by username
     if identity == 1:
         return {"is_admin": True}
