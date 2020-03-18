@@ -1,7 +1,6 @@
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
-from werkzeug.security import safe_str_cmp
-from flask_jwt_extended import set_access_cookies, create_access_token, create_refresh_token, get_jwt_claims
+from flask_jwt_extended import get_jwt_claims
 from flask_jwt_extended import jwt_required
 
 from models.users.UsersModel import UsersModel
@@ -24,7 +23,7 @@ class Users(Resource):
             return {"users": user_list}, 200
         return {"message": "No users present in the system as of now"}, 404
 
-se
+
 class SingleUser(Resource):
 
     @jwt_required
@@ -76,9 +75,7 @@ class SingleUser(Resource):
         user = UsersModel.find_by_name(name)
         user.remove_from_database()
 
-        return {"mes"
-                ""
-                "sage": "Item deleted"}, 204
+        return {"message": "Item deleted"}, 204
 
     def put(self, name):
         parser = reqparse.RequestParser()
