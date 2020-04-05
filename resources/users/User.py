@@ -7,7 +7,7 @@ from models.users.UsersModel import UsersModel
 
 
 class Users(Resource):
-    # GET method to get the details of all the users s
+    # GET method to get the details of all the users
     def get(self):
         users = UsersModel.get_all_users()
         user_list = []

@@ -13,6 +13,9 @@ class ProjectsModel(db.Model):
 
     types = db.relationship('TypesModel')
     users = db.relationship('UsersModel', lazy='dynamic')
+    donation_for_project = db.relationship('DonationsModel', lazy='dynamic')
+    # donation_for_project = db.relationship('DonationsModel', backref='Donation_for_project',
+    #                                      foreign_keys='DonationsModel.project_id')
 
     def __init__(self, _id, project_name, description, type_id, create_date, update_date):
         self.id = _id

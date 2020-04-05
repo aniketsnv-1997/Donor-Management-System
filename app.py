@@ -2,9 +2,11 @@
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from sqlalchemy import create_engine
 
 # Dependency Imports
 from database import db
+import os
 
 # Imports from user related Resources
 from resources.users.User import Users, SingleUser
@@ -20,11 +22,14 @@ from resources.donors.References import Reference, SingleReference
 from resources.donors.States import State, SingleState
 from resources.donors.Country import Country, SingleCountry
 
-from models.users.UsersModel import UsersModel
+# Imports from donations related Resources
+from resources.donations.Donations import Donation, SingleDonation
+
 from security import UserLogin, TokenRefresh
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///new_data.db'
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + BASE_DIR + '/' + "db.sqlite"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True  # This line enables the Flask app to identify errors and exceptions
 # related to Flask-JWT and then report them accordingly
@@ -41,6 +46,7 @@ def create_tables():
 
 jwt = JWTManager(app)
 
+
 # Used to add some more values and functionalities to the existing JWT token, like admin and user access
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
@@ -49,40 +55,44 @@ def add_claims_to_jwt(identity):
         return {"is_admin": True}
     return {"is_admin": False}
 
+
 # When JWT token sent by user to server is expired (a JWT token expired after 5 minutes)
-@jwt.expired_token_loader()
+@jwt.expired_token_loader
 def expired_token_callback():
     return jsonify({
-            "message": "The token has expired",
-            "error": "token_expired"
-        }), 401
+        "message": "The token has expired",
+        "error": "token_expired"
+    }), 401
+
 
 # When JWT token sent by user to server is not a valid token
-@jwt.invalid_token_loader()
-def invalid_token_callback():
-    return jsonify({
-        "message": "Identity verification failed",
-        "error": "token_invalid"
-    })
+# @jwt.invalid_token_loader
+# def invalid_token_callback():
+#     return jsonify({
+#         "message": "Identity verification failed",
+#         "error": "token_invalid"
+#     })
 
 # When the user does not send any token to the server
-@jwt.unauthorized_loader()
+@jwt.unauthorized_loader
 def no_token_callback():
     return jsonify({
         "message": "No token provided",
         "error": "no_token_received"
     })
 
+
 # When the server needs a fresh token
-@jwt.needs_fresh_token_loader()
+@jwt.needs_fresh_token_loader
 def no_fresh_token_callback():
     return jsonify({
         "message": "Send a fresh token",
         "error": "fresh_token_required"
     })
 
+
 # When the server gets a revoked token from user, used in case of logouts
-@jwt.revoked_token_loader()
+@jwt.revoked_token_loader
 def revoked_token_callback():
     return jsonify({
         "message": "You have been logged out from the system",
@@ -110,6 +120,9 @@ api.add_resource(Donors, '/donors')
 api.add_resource(SingleDonor, '/donors/<string:name>')
 api.add_resource(UserLogin, '/login')
 api.add_resource(TokenRefresh, '/refresh')
+api.add_resource(Donation, '/donations')
+api.add_resource(SingleDonation, '/donations')
+
 
 if __name__ == '__main__':
     app.run()

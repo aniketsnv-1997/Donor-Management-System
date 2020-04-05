@@ -1,7 +1,7 @@
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
 
-from models.donors.ReferenceModel import ReferenceModel
+from models.donors.ReferencesModel import ReferenceModel
 
 
 class Reference(Resource):

@@ -1,7 +1,7 @@
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
 
-from models.donors.StateModel import StateModel
+from models.donors.StatesModel import StateModel
 
 
 class State(Resource):

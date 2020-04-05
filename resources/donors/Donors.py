@@ -46,7 +46,7 @@ class SingleDonor(Resource):
 
         parser.add_arguement('email_address', type=str, required=True, help='This is a mandatory field to be filled')
         parser.add_arguement('date_of_birth', type=str, required=True, help='This is a mandatory field to be filled')
-        parser.add_argument('date_of_anniversary', type=str, required=True, help='This is a mandatory field to be filled')
+        parser.add_argument('date_of_anniversary', type=str, required=True, help='This is mandatory field to be filled')
         parser.add_argument('pan', type=str, required=True, help='This is a mandatory field to be filled')
         parser.add_argument('uid', type=int, required=True, help='This is a mandatory value to be filled')
         parser.add_argument('country_code', type=int, required=True, help='This is a mandatory field to be filled')

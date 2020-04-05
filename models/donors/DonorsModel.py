@@ -13,7 +13,7 @@ class DonorsModel(db.Model):
     uid = db.Column(db.BIGINT, unique=True, nullable=False)
     country_code = db.Column(db.INT, unique=False, nullable=False)
     phone_number = db.Column(db.VARCHAR(12), unique=True, nullable=False)
-    reference_id = db.Column(db.INT, db.ForeignKey('references.id'), unique=True, nullable=False)
+    reference_id = db.Column(db.INT, db.ForeignKey('references.id'), unique=False, nullable=False)
     other_reference = db.Column(db.VARCHAR(20), unique=False, nullable=True)
     referrer_name = db.Column(db.VARCHAR(20), nullable=True, unique=False)
     address_line_1 = db.Column(db.VARCHAR(50), nullable=False, unique=False)
