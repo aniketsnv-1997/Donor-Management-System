@@ -9,8 +9,7 @@ class MM(db.Model):
     create_date = db.Column(db.DATE, nullable=False, unique=False)
     update_date = db.Column(db.DATE, nullable=False, unique=False)
 
-    donation_modes = db.relationship('DonationsModel', backref='donation',
-                                     foreign_keys='DonationsModel.mode_id')
+    donations = db.relationship('DonationsModel', backref='mode', lazy=True)
 
     def __init__(self, _id, mode_name, create_date, update_date):
         self.id = _id

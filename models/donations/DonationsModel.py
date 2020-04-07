@@ -2,7 +2,7 @@ from database import db
 
 
 class DonationsModel(db.Model):
-    __tablename__ = 'donation'
+    __tablename__ = 'donations'
 
     id = db.Column(db.INTEGER, primary_key=True)
     date_of_donation = db.Column(db.DATE, unique=False, nullable=False)
@@ -15,9 +15,9 @@ class DonationsModel(db.Model):
     project_id = db.Column(db.INT, db.ForeignKey('projects.id'), nullable=False, unique=False)
     donor_id = db.Column(db.INT, db.ForeignKey('donors.id'), nullable=False, unique=False)
 
-    project = db.relationship("ProjectsModel")
-    mode = db.relationship("MM")
-    donor = db.relationship("DonorsModel")
+    # project = db.relationship("ProjectsModel")
+    # mode = db.relationship("MM")
+    # donor = db.relationship("DonorsModel")
 
     kind_donations = db.relationship('KindDonationModel', lazy='dynamic')
 

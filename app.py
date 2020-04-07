@@ -2,11 +2,13 @@
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from sqlalchemy import create_engine
 
 # Dependency Imports
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects import sqlite
+from sqlalchemy import create_engine
 from database import db
-import os
+import sqlite3
 
 # Imports from user related Resources
 from resources.users.User import Users, SingleUser
@@ -28,20 +30,26 @@ from resources.donations.Donations import Donation, SingleDonation
 from security import UserLogin, TokenRefresh
 
 app = Flask(__name__)
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + BASE_DIR + '/' + "db.sqlite"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True  # This line enables the Flask app to identify errors and exceptions
 # related to Flask-JWT and then report them accordingly
+db = SQLAlchemy(app)
 app.secret_key = 'aniket'
 app.config['JWT_SECRET_KEY'] = 'aniket'
 api = Api(app)
 db.init_app(app)
 
 
-@app.before_first_request
-def create_tables():
+def create_db():
     db.create_all()
+    print("Database created successfully!")
+
+
+@app.before_first_request
+def create_db_command():
+    create_db()
 
 
 jwt = JWTManager(app)
@@ -122,7 +130,6 @@ api.add_resource(UserLogin, '/login')
 api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(Donation, '/donations')
 api.add_resource(SingleDonation, '/donations')
-
 
 if __name__ == '__main__':
     app.run()

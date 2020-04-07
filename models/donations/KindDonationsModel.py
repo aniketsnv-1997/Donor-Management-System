@@ -11,7 +11,7 @@ class KindDonationModel(db.Model):
     donation_id = db.Column(db.INT, db.ForeignKey('donations.id'), unique=False, nullable=True)
     create_date = db.Column(db.DATE, unique=False, nullable=False)
 
-    donations = db.relationship('DonationsModel')
+    # donations = db.relationship('DonationsModel')
 
     def __init__(self, _id, item, quantity, unit, donation_id, create_date):
         self.id = _id
