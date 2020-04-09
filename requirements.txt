@@ -1,6 +1,0 @@
-sqlalchemy
-Flask
-Flask-RESTful
-Flask-JWT
-Flask-SQLAlchemy
-gunicorn
