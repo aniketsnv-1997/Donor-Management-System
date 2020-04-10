@@ -7,8 +7,8 @@ class CountryModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     country_name = db.Column(db.String(20), unique=True, nullable=False)
-    create_date = db.Column(db.String, unique=False, nullable=False)
-    update_date = db.Column(db.String, unique=False, nullable=True)
+    create_date = db.Column(db.Date, unique=False, nullable=False)
+    update_date = db.Column(db.Date, unique=False, nullable=True)
 
     # donors = db.relationship('DonorsModel', lazy='dynamic')
     states = db.relationship('StateModel', backref='country', lazy='dynamic')

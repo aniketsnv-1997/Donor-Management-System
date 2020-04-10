@@ -7,7 +7,7 @@ class RolesModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(10), unique=True, nullable=False)
-    description = db.Column(db.Text, unique=True, nullable=False)
+    description = db.Column(db.String(50), unique=True, nullable=False)
     create_date = db.Column(db.DateTime, unique=False, nullable=False)
     update_date = db.Column(db.DateTime, unique=False, nullable=True)
 

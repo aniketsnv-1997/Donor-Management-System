@@ -8,7 +8,7 @@ class ProjectsModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(10), unique=True, nullable=False)
-    description = db.Column(db.Text, unique=True, nullable=False)
+    description = db.Column(db.String(50 ), unique=True, nullable=False)
     type_id = db.Column(db.Integer, db.ForeignKey('types.id'), unique=False, nullable=False)
     create_date = db.Column(db.DateTime, unique=False, nullable=False)
     update_date = db.Column(db.DateTime, unique=False, nullable=True)
