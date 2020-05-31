@@ -5,49 +5,102 @@ from dms.models.users.RightsModel import RightsModel
 
 
 class Rights(Resource):
-
     def get(self):
         rights = RightsModel.get_all_rights()
         right_list = []
 
         # TODO Use LIST Comprehension for returning the RIGHTS
 
-        for right in rights:
-            right_list.append({"id": right.id, "name": right.rights_name, "description": right.description,
-                               "create_date": str(right.create_date), "update_date": str(right.update_date)})
+        if rights:
+            for right in rights:
+                right_list.append(
+                    {
+                        "id": right.id,
+                        "name": right.rights_name,
+                        "description": right.description,
+                        "create_date": str(right.create_date),
+                        "update_date": str(right.update_date),
+                    }
+                )
 
-        return {"rights": right_list}, 200
+            return {"rights": right_list}, 200
+
+        return {"message": f"No Rights present in the system!"}, 404
 
 
 class SingleRight(Resource):
+    def get(self, _id):
+        right = RightsModel.find_by_id(_id)
 
-    def get(self, name):
-        right = RightsModel.find_by_name(name)
+        if right:
+            return (
+                {
+                    "id": right.id,
+                    "name": right.role_name,
+                    "description": right.description,
+                    "create_date": str(right.create_date),
+                    "update_date": str(right.update_date),
+                },
+                200,
+            )
 
-        return {"id": right.id, "name": right.role_name, "description": right.description,
-                "create_date": str(right.create_date), "update_date": str(right.update_date)}, 200
+        return {"message": f"No Right with {_id} is present in the system!"}, 404
 
-    def post(self, name):
+    def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('description', type=str, required=True, help='This is a mandatory field to be filled')
+        parser.add_argument(
+            "right_name",
+            type=str,
+            required=True,
+            help="This is a mandatory field to be filled",
+        )
+        parser.add_argument(
+            "description",
+            type=str,
+            required=True,
+            help="This is a mandatory field to be filled",
+        )
 
         data = parser.parse_args()
 
-        if RightsModel.find_by_name(name):
-            return {"message": f"Right with name {name} is already present in the system!"}, 401
+        right = RightsModel.find_by_name(data["right_name"])
 
-        new_right = RightsModel(None, name, data['description'], dt.date(dt.now()), None)
+        if right:
+            return (
+                {
+                    "message": f"Right {data['right_name']} is already present in the system!"
+                },
+                400,
+            )
+
+        new_right = RightsModel(
+            None, data["right_name"], data["description"], dt.now(), None
+        )
+
         new_right.save_to_database()
-        return SingleRight.get(self, name), 201
+        new_right_added = RightsModel.find_by_name(data["right_name"])
 
-    def delete(self, name):
-        right = RightsModel.find_by_name(name)
-        if right is None:
-            return {"message": f"right with name {name} is not present in the system!"}, 401
+        return (
+            {
+                "id": new_right_added.id,
+                "right_name": new_right_added.rights_name,
+                "description": new_right_added.description,
+                "create_date": str(new_right_added.create_date),
+                "update_date": str(new_right_added.update_date),
+            },
+            201,
+        )
 
-        right.remove_from_database()
+    def delete(self, _id):
+        right = RightsModel.find_by_name(_id)
 
-        return 204
+        if right:
+            deleted_right = right.rights_name
+            right.remove_from_database()
 
-    def put(self, name):
-        pass
+            return (
+                {"message": f"Right {deleted_right} is not present in the system!"},
+                204,
+            )
+
+        return {"message": f"Right with id {_id} is not present in the system!"}, 400

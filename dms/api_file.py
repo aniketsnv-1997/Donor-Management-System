@@ -37,10 +37,7 @@ def add_claims_to_jwt(identity):
 # When JWT token sent by user to server is expired (a JWT token expired after 5 minutes)
 @jwt.expired_token_loader
 def expired_token_callback():
-    return jsonify({
-        "message": "The token has expired",
-        "error": "token_expired"
-    }), 401
+    return jsonify({"message": "The token has expired", "error": "token_expired"}), 401
 
 
 # When JWT token sent by user to server is not a valid token
@@ -54,51 +51,45 @@ def expired_token_callback():
 # When the user does not send any token to the server
 @jwt.unauthorized_loader
 def no_token_callback():
-    return jsonify({
-        "message": "No token provided",
-        "error": "no_token_received"
-    })
+    return jsonify({"message": "No token provided", "error": "no_token_received"})
 
 
 # When the server needs a fresh token
 @jwt.needs_fresh_token_loader
 def no_fresh_token_callback():
-    return jsonify({
-        "message": "Send a fresh token",
-        "error": "fresh_token_required"
-    })
+    return jsonify({"message": "Send a fresh token", "error": "fresh_token_required"})
 
 
 # When the server gets a revoked token from user, used in case of logouts
 @jwt.revoked_token_loader
 def revoked_token_callback():
-    return jsonify({
-        "message": "You have been logged out from the system",
-        "error": "revoked_token"
-    })
+    return jsonify(
+        {
+            "message": "You have been logged out from the system",
+            "error": "revoked_token",
+        }
+    )
 
 
-api.add_resource(Users, '/users')
-api.add_resource(SingleUser, '/users/<string:name>')
-api.add_resource(Projects, '/projects')
-api.add_resource(SingleProject, '/projects/<string:name>')
-api.add_resource(Roles, '/roles')
-api.add_resource(SingleRole, '/roles/<string:name>')
-api.add_resource(Rights, '/rights')
-api.add_resource(SingleRight, '/rights/<string:name>')
-api.add_resource(Types, '/types')
-api.add_resource(SingleType, '/types/<string:name>')
-api.add_resource(Country, '/country')
-api.add_resource(SingleCountry, '/country/<string:name>')
-api.add_resource(Reference, '/references')
-api.add_resource(SingleReference, '/references/<string:name>')
-api.add_resource(State, '/states')
-api.add_resource(SingleState, '/states/<string:name>')
-api.add_resource(Donors, '/donors')
-api.add_resource(SingleDonor, '/donors/<string:name>')
-api.add_resource(UserLogin, '/login')
-api.add_resource(TokenRefresh, '/refresh')
-api.add_resource(Donation, '/donations')
-api.add_resource(SingleDonation, '/donations')
-
-
+api.add_resource(Users, "/users")
+api.add_resource(SingleUser, "/users/<string:name>")
+api.add_resource(Projects, "/projects")
+api.add_resource(SingleProject, "/projects/<string:name>")
+api.add_resource(Roles, "/roles")
+api.add_resource(SingleRole, "/roles/<string:name>")
+api.add_resource(Rights, "/rights")
+api.add_resource(SingleRight, "/rights/<string:name>")
+api.add_resource(Types, "/types")
+api.add_resource(SingleType, "/types/<string:name>")
+api.add_resource(Country, "/country")
+api.add_resource(SingleCountry, "/country/<string:name>")
+api.add_resource(Reference, "/references")
+api.add_resource(SingleReference, "/references/<string:name>")
+api.add_resource(State, "/states")
+api.add_resource(SingleState, "/states/<string:name>")
+api.add_resource(Donors, "/donors")
+api.add_resource(SingleDonor, "/donors/<string:name>")
+api.add_resource(UserLogin, "/login")
+api.add_resource(TokenRefresh, "/refresh")
+api.add_resource(Donation, "/donations")
+api.add_resource(SingleDonation, "/donations")

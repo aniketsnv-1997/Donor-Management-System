@@ -6,7 +6,6 @@ from dms.models.donations.DonationsModel import DonationsModel
 
 
 class KindDonations(Resource):
-
     def get(self):
         kind_donations = KindDonationModel.get_all_kind_donations()
         kind_donations_list = []
@@ -29,18 +28,20 @@ class KindDonations(Resource):
 
 
 class SingleKindDonation(Resource):
+    def get(self, _id):
 
-        def get(self, _id):
-
-            single_kind_donation = KindDonationModel.find_by_id(_id)
-            if single_kind_donation:
-                return {
+        single_kind_donation = KindDonationModel.find_by_id(_id)
+        if single_kind_donation:
+            return (
+                {
                     "id": single_kind_donation.id,
                     "item": single_kind_donation.item,
                     "quantity": single_kind_donation.quantity,
                     "unit": single_kind_donation.unit,
                     "donation_id": single_kind_donation.donation_id,
-                    "create_date": single_kind_donation.create_date
-                }, 200
+                    "create_date": single_kind_donation.create_date,
+                },
+                200,
+            )
 
-            return {"message": "No single donation with a given id found"}, 404
+        return {"message": "No single donation with a given id found"}, 404

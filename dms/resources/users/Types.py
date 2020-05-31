@@ -5,7 +5,6 @@ from ...models.users.TypesModel import TypesModel
 
 
 class Types(Resource):
-
     def get(self):
         types = TypesModel.get_all_types()
         type_list = []
@@ -14,45 +13,95 @@ class Types(Resource):
 
         if types:
             for _type in types:
-                type_list.append({"id": _type.id, "name": _type.type_name, "description": _type.description,
-                                  "create_date": str(_type.create_date), "update_date": str(_type.update_date)})
+                type_list.append(
+                    {
+                        "id": _type.id,
+                        "name": _type.type_name,
+                        "description": _type.description,
+                        "create_date": str(_type.create_date),
+                        "update_date": str(_type.update_date),
+                    }
+                )
 
             return {"types": type_list}, 200
-        return {"message": "No types exist in the system as of now"}, 404
+
+        return {"message": "No types exist in the system as of now!"}, 404
 
 
 class SingleType(Resource):
-
-    def get(self, name):
-        _type = TypesModel.find_by_name(name)
+    def get(self, _id):
+        _type = TypesModel.find_by_id(_id)
 
         if _type:
-            return {"id": _type.id, "name": _type.type_name, "description": _type.description,
-                    "create_date": str(_type.create_date), "update_date": str(_type.update_date)}, 200
+            return (
+                {
+                    "id": _type.id,
+                    "name": _type.type_name,
+                    "description": _type.description,
+                    "create_date": str(_type.create_date),
+                    "update_date": str(_type.update_date),
+                },
+                200,
+            )
 
-        return {"message": f"No Type with name {name} exist in the system as of now"}, 404
+        return {"message": f"No Type with id {_id} exist in the system as of now"}, 404
 
-    def post(self, name):
+    def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('description', type=str, required=True, help='This is a mandatory field to be filled')
+        parser.add_argument(
+            "type_name",
+            type=str,
+            required=True,
+            help="This is a mandatory field to be filled",
+        )
+        parser.add_argument(
+            "description",
+            type=str,
+            required=True,
+            help="This is a mandatory field to be filled",
+        )
 
         data = parser.parse_args()
 
-        if TypesModel.find_by_name(name):
-            return {"message": f"Type with name {name} is already present in the system!"}, 401
+        _type = TypesModel.find_by_name(data["type_name"])
+        if _type:
+            return (
+                {
+                    "message": f"Type with name {_type.type_name} is already present in the system!"
+                },
+                401,
+            )
 
-        new_type = TypesModel(None, name, data['description'], dt.date(dt.now()), None)
+        new_type = TypesModel(
+            None, data["type_name"], data["description"], dt.now(), None
+        )
+
         new_type.save_to_database()
-        return SingleType.get(self, name), 201
 
-    def delete(self, name):
-        _type = TypesModel.find_by_name(name)
-        if _type is None:
-            return {"message": f"type with name {name} is not present in the system!"}, 401
+        new_type_added = TypesModel.find_by_name(data["type_name"])
 
-        _type.remove_from_database()
+        return (
+            {
+                "id": new_type_added.id,
+                "type_name": new_type_added.type_name,
+                "description": new_type_added.description,
+                "create_date": str(new_type_added.create_date),
+                "update_date": str(new_type_added.update_date),
+            },
+            201,
+        )
 
-        return 204
+    def delete(self, _id):
+        _type = TypesModel.find_by_id(_id)
+        if _type:
+            type_tobe_deleted = _type.type_name
+            _type.remove_from_database()
 
-    def put(self, name):
-        pass
+            return (
+                {
+                    "message": f"type {type_tobe_deleted} has been deleted from the system!"
+                },
+                204,
+            )
+
+        return {"message": f"Type with it {_id} is not present in the system!"}, 401

@@ -3,7 +3,7 @@ from .UsersModel import UsersModel
 
 
 class RightsModel(db.Model):
-    __tablename__ = 'rights'
+    __tablename__ = "rights"
 
     id = db.Column(db.Integer, primary_key=True)
     rights_name = db.Column(db.String(10), unique=True, nullable=False)
@@ -11,9 +11,11 @@ class RightsModel(db.Model):
     create_date = db.Column(db.DateTime, unique=False, nullable=False)
     update_date = db.Column(db.DateTime, unique=False, nullable=True)
 
-    users = db.relationship('UsersModel', backref='right')
+    users = db.relationship("UsersModel", backref="right")
 
-    def __init__(self, _id, rights_name, description, create_date, update_date):
+    def __init__(
+        self, _id: id, rights_name: str, description: str, create_date, update_date
+    ):
         self.id = _id
         self.rights_name = rights_name
         self.description = description
@@ -25,17 +27,17 @@ class RightsModel(db.Model):
         return cls.query.all()
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str):
         return cls.query.filter_by(rights_name=name).first()
 
     @classmethod
-    def find_by_id(cls, _id):
+    def find_by_id(cls, _id: int):
         return cls.query.filter_by(id=_id).first()
 
-    def save_to_database(self):
+    def save_to_database(self) -> None:
         db.session.add(self)
         db.session.commit()
 
-    def remove_from_database(self):
+    def remove_from_database(self) -> None:
         db.session.delete(self)
         db.session.commit()
