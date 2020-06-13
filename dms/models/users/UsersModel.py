@@ -1,3 +1,5 @@
+from datetime import datetime as dt
+
 from dms import db
 from typing import Dict, List
 
@@ -8,7 +10,6 @@ class UsersModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False, unique=False)
     email_address = db.Column(db.String(30), nullable=False, unique=True)
-    password = db.Column(db.String(10), nullable=False, unique=False)
     role_id = db.Column(
         db.Integer, db.ForeignKey("roles.id"), nullable=False, unique=False
     )
@@ -18,30 +19,22 @@ class UsersModel(db.Model):
     rights_id = db.Column(
         db.Integer, db.ForeignKey("rights.id"), nullable=False, unique=False
     )
-    create_date = db.Column(db.DateTime, nullable=False, unique=False)
-    update_date = db.Column(db.DateTime, nullable=True, unique=False)
 
-    credentials = db.relationship("CredentialsModel", backref="user")
+    credential_id = db.Column(
+        db.Integer, db.ForeignKey("credentials.id"), nullable=False, unique=True
+    )
 
-    def __init__(
-        self,
-        _id: int,
-        name: str,
-        email_address: str,
-        password: str,
-        role_id: int,
-        project_id: int,
-        rights_id: int,
-        create_date,
-        update_date,
-    ):
-        self.id = _id
+    create_date = db.Column(db.DateTime, nullable=False, unique=False, default=dt.now())
+    update_date = db.Column(db.DateTime, nullable=True, unique=False, default=dt.now())
+
+    def __init__(self, _id, name, email_address, role_id, project_id, rights_id, credential_id, create_date, update_date,):
+        self._id = id
         self.name = name
         self.email_address = email_address
-        self.password = password
         self.role_id = role_id
         self.project_id = project_id
         self.rights_id = rights_id
+        self.credential_id = credential_id
         self.create_date = create_date
         self.update_date = update_date
 

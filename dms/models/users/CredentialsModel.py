@@ -7,9 +7,11 @@ class CredentialsModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String(30), nullable=False, unique=True)
-    password = db.Column(db.String(10), db.ForeignKey("users.email_address"), nullable=False, unique=False)
+    password = db.Column(db.String(10), nullable=False, unique=False)
     create_date = db.Column(db.DateTime, nullable=False, unique=False)
     update_date = db.Column(db.DateTime, nullable=True, unique=False)
+
+    users = db.relationship("UsersModel", backref="credentials")
 
     def __init__(self, _id, email_address, password, create_date, update_date,):
         self._id = id

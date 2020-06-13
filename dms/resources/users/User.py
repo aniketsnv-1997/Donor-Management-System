@@ -141,15 +141,14 @@ class SingleUser(Resource):
                 401,
             )
 
+        new_user_credentials = CredentialsModel(None, user_data['email_address'], user_data['password'], dt.now(), None)
+        new_user_credentials.save_to_database()
+
+        user_credential_added = CredentialsModel.get_credential_by_email_address(user_data['email_address'])
+
         new_user = UsersModel(None, user_data['name'], user_data['email_address'], user_data['role_id'],
-                              user_data['project_id'],
-                              user_data['rights_id'], dt.now(), None)
-
+                              user_data['project_id'], user_data['rights_id'], user_credential_added.id, dt.now(), None)
         new_user.save_to_database()
-
-        new__user_credentials = CredentialsModel(None, user_data['email_address'], user_data['password'], dt.now(),
-                                                 None)
-        new__user_credentials.save_to_database()
 
         roles = RolesModel.find_by_id(new_user.role_id)
         projects = ProjectsModel.find_by_id(new_user.project_id)
@@ -176,7 +175,7 @@ class SingleUser(Resource):
             VSMandal Admin
         """
 
-        send_email_of_user_registration("aniketsvsmecc@gmail.com", user_data.email_address, email_body)
+        send_email_of_user_registration("aniketsvsmecc@gmail.com", [user_data.email_address], email_body)
 
         return {
                    "id": new_user.id,
@@ -190,16 +189,16 @@ class SingleUser(Resource):
                }, 201
 
         # dump() is used to deserialize an object and convert it into a dictionary/json
-        # return user_schema.dump(new_user), 201
+        # return user_schema.dump( new_user), 201
 
     # Admin will have to re-login into the system before he wants to delete an user
-    @fresh_jwt_required
+    # @fresh_jwt_required
     def delete(self, _id):
 
         # Used to check that the user is a admin, as only admins are allowed to view details of individual user
-        claims = get_jwt_claims()
-        if not claims["is_admin"]:
-            return {"message": "Admin privileges required"}, 401
+        # claims = get_jwt_claims()
+        # if not claims["is_admin"]:
+        #     return {"message": "Admin privileges required"}, 401
 
         user = UsersModel.find_by_id(_id)
         user_credential = CredentialsModel.get_credential_by_email_address(user.email_address)
