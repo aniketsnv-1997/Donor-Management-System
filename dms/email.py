@@ -1,27 +1,46 @@
+from requests import Response, post
+from flask import url_for, request, redirect
 from flask_mail import Message
 from dms import mail
 
 
-def send_email_of_user_registration(sender, receiver, text_body):
-    msg = Message("DMS Account Creation Email", sender=sender, recipients=receiver)
-    msg.body = text_body
-    mail.send(msg)
-    return 1
+class AutomaticEmailException(Exception):
+    def __init__(self, message: str):
+        super.__init__(message)
 
 
-def send_email_of_donor_registration(sender, receiver, text_body):
-    msg = Message("Welcome to the VSM Family", sender=sender, recipients=receiver)
-    msg.body = text_body
-    mail.send(msg)
+class AutomaticEmail:
+    """
+    This class consists of the following methods which are used to send automatic emails
 
+    send_email_of_user_registration(email_address, name, password, role_name, project name) - Responsible to notify an
+    newly registered user through an email
+    """
+    MAILGUN_DOMAIN = "sandbox7c7a5537dd414ec2b57f3e26ce084208.mailgun.org"
+    MAILGUN_API_KEY = "0bde311ed42585b3c94ad8d5ef0f5d28-1b6eb03d-0e5a3b97"
+    FROM_TITLE = "Vivekanand Seva Mandal DMS Communications"
+    FROM_EMAIL = "postmaster@sandbox7c7a5537dd414ec2b57f3e26ce084208.mailgun.org"
 
-def send_email_of_birthday(sender, receiver, text_body):
-    msg = Message("Birthday Wishes!", sender=sender, recipients=receiver)
-    msg.body = text_body
-    mail.send(msg)
+    @classmethod
+    def send_email(cls, email_address: str, subject: str, body: str) -> Response:
+        if cls.MAILGUN_API_KEY is None:
+            raise AutomaticEmailException("Failed to load the MAILGUN_API_KEY")
 
+        if cls.MAILGUN_DOMAIN is None:
+            raise AutomaticEmailException("Failed to load the MAILGUN_DOMAIN")
 
-def send_email_of_donation(subject, sender, receiver, text_body):
-    msg = Message(subject, sender=sender, recipients=receiver)
-    msg.body = text_body
-    mail.send(msg)
+        response = post(
+            f"https://api.mailgun.net/v3/{cls.MAILGUN_DOMAIN}/messages",
+            auth=("api", cls.MAILGUN_API_KEY),
+            data={
+                "from": f"{cls.FROM_TITLE} <{cls.FROM_EMAIL}>",
+                "to": email_address,
+                "subject": subject,
+                "text": body
+            }
+        )
+
+        if response.status_code != 200:
+            raise AutomaticEmailException("Failed to send the email, User Registration Failed!")
+
+        return response

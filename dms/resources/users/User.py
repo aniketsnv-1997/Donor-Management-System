@@ -1,3 +1,5 @@
+import traceback
+
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
 from flask_jwt_extended import (
@@ -9,23 +11,18 @@ from flask_jwt_extended import (
     get_jwt_identity,
     get_raw_jwt,
     fresh_jwt_required,
-)
+    get_jti)
 from werkzeug.security import safe_str_cmp
 
-from dms.email import send_email_of_user_registration
+from dms.email import AutomaticEmail, AutomaticEmailException
 from dms.models.users.UsersModel import UsersModel
 from dms.models.users.CredentialsModel import CredentialsModel
 from dms.models.users.ProjectsModel import ProjectsModel
 from dms.models.users.RolesModel import RolesModel
-from dms.logout import LOGOUT
+from dms.logout import revoked_store
+from dms import ACCESS_EXPIRES, REFRESH_EXPIRES
 
-
-# from dms.schemas.users.userschema import UserSchema
-# from dms.schemas.users.credentialschema import CredentialSchema
-
-# Serialization and Deserialization, to be worked upon later
-# user_schema = UserSchema(unknown='INCLUDE', partial=['update_date'])
-# credential_schema = CredentialSchema(unknown='INCLUDE', partial=['update_date'])
+logout_set = ()
 
 
 class Users(Resource):
@@ -83,8 +80,6 @@ class SingleUser(Resource):
 
         return {"message": f"User with name {_id} does not exist in the system!"}, 404
 
-    # POST method to add a new users into system. Implemented using the marshmallow serialization-deserialization
-    # concept
     # @jwt_required
     def post(self):
 
@@ -92,16 +87,6 @@ class SingleUser(Resource):
         # claims = get_jwt_claims()
         # if not claims["is_admin"]:
         #     return {"message": "Admin privileges required"}, 401
-
-        # Let us validate the user_data coming through the request using request parser
-
-        # whenever we get th json data from the user, it passes through marshmallow and gets serialized with the
-        # help of user schema. Thus we directly get the object at the backend
-        # Also, load() is used to get the data from the user
-        # new_user = user_schema.load(request.get_json())
-        # user_credentials = credential_schema.load(
-        #     {"email_address": new_user.email_address, "password": new_user.password}
-        # )
 
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, required=True, help='This is the mandatory field to be filled')
@@ -148,57 +133,66 @@ class SingleUser(Resource):
 
         new_user = UsersModel(None, user_data['name'], user_data['email_address'], user_data['role_id'],
                               user_data['project_id'], user_data['rights_id'], user_credential_added.id, dt.now(), None)
-        new_user.save_to_database()
 
-        roles = RolesModel.find_by_id(new_user.role_id)
-        projects = ProjectsModel.find_by_id(new_user.project_id)
+        role = RolesModel.find_by_id(user_data['role_id'])
+        project = ProjectsModel.find_by_id(user_data['project_id'])
 
         email_body = f"""
-            Hello {user_data.name}
-            
-            Welcome aboard on the VSM DMS plaform
+            Hello{user_data['name']}
+
+            Welcome on the VSM DMS platform
             
             Your account login credentials are as follows:
-            1. Email Address - {user_data.email_address}
-            2. Password - {user_data.password}
+            1.EmailAddress-{user_data['email_address']}
+            2.Default Password-{user_data['password']}
             
-            We request you to change your password after you sign in for the first time into your account
+            We request you to change your default password on the link given below, for your safer experience on the DMS
             
-            Your other details are as follows: 
-            1. Role - {roles.role_name}
-            2. Project - {projects.project_name}
+            Your other details are as follows:
+            1.Role-{role.role_name}
+            2.Project-{project.project_name}
             
-            If any of your details is wrong, contact Vrushali Modak Mam for the necessary corrections to be made, 
-            immediately 
+            If any of your details is/are wrong, please contact the Admin for the necessary corrections to be  made
             
             Thanks & Regards
-            VSMandal Admin
+            Vivekanand Seva Mandal DMS Communications
         """
 
-        send_email_of_user_registration("aniketsvsmecc@gmail.com", [user_data.email_address], email_body)
+        try:
+            new_user.save_to_database()
+            AutomaticEmail.send_email(user_data['email_address'], "User Registration Confirmation", email_body)
+            return {
+                       "id": new_user.id,
+                       "name": new_user.name,
+                       "email_address": new_user.email_address,
+                       "role_id": new_user.role_id,
+                       "project_id": new_user.project_id,
+                       "rights_id": new_user.rights_id,
+                       "create_date": str(new_user.create_date),
+                       "update_date": str(new_user.update_date)
+                   }, 201
 
-        return {
-                   "id": new_user.id,
-                   "name": new_user.name,
-                   "email_address": new_user.email_address,
-                   "role_id": new_user.role_id,
-                   "project_id": new_user.project_id,
-                   "rights_id": new_user.rights_id,
-                   "create_date": str(new_user.create_date),
-                   "update_date": str(new_user.update_date),
-               }, 201
+        except AutomaticEmailException as e:
+            new_user.remove_from_database()
+            return {
+                "message": str(e)
+            }, 500
 
-        # dump() is used to deserialize an object and convert it into a dictionary/json
-        # return user_schema.dump( new_user), 201
+        except:
+            traceback.print_exc()
+            new_user.remove_from_database()
+            return {
+                       "message": "USer Registration Failed"
+                   }, 500
 
     # Admin will have to re-login into the system before he wants to delete an user
-    # @fresh_jwt_required
+    @fresh_jwt_required
     def delete(self, _id):
 
         # Used to check that the user is a admin, as only admins are allowed to view details of individual user
-        # claims = get_jwt_claims()
-        # if not claims["is_admin"]:
-        #     return {"message": "Admin privileges required"}, 401
+        claims = get_jwt_claims()
+        if not claims["is_admin"]:
+            return {"message": "Admin privileges required"}, 401
 
         user = UsersModel.find_by_id(_id)
         user_credential = CredentialsModel.get_credential_by_email_address(user.email_address)
@@ -220,7 +214,7 @@ class SingleUser(Resource):
     # Update method to be rewritten
     def put(self, _id):
         parser = reqparse.RequestParser()
-        # parser.add_argument('name', type=str, required=True, help='This is the mandatory field to be filled')
+
         parser.add_argument(
             "email_address",
             type=str,
@@ -228,7 +222,6 @@ class SingleUser(Resource):
             help="This is the mandatory field to be filled",
         )
 
-        # parser.add_argument('password', type=str, required=False, help='This is the mandatory field to be filled')
         parser.add_argument(
             "role_id",
             type=int,
@@ -248,23 +241,51 @@ class SingleUser(Resource):
         user_data = parser.parse_args()
         user = UsersModel.find_by_id(_id)
 
-        # user_details_to_be_updated = user_schema.load(request.get_json())
-
         if user:
             user_credential = CredentialsModel.get_credential_by_email_address(user.email_address)
 
-            user.email_address = user_data.email_address
-            user.role_id = user_data.role_id
-            user.project_id = user_data.project_id
-            user.rights_id = user_data.rights_id
-            user.update_date = dt.now()
+            if user_data['email_address'] is not None:
+                user.email_address = user_data['email_address']
+                user_credential.email_address = user_data['email_address']
 
-            user_credential.email_address = user_data.email_address
+            if user_data['role_id'] is not None:
+                user.role_id = user_data['role_id']
+
+            if user_data['project_id'] is not None:
+                user.project_id = user_data['project_id']
+
+            if user_data['project_id'] is not None:
+                user.rights_id = user_data['rights_id']
+
+            user.update_date = dt.now()
 
             user.save_to_database()
             user_credential.save_to_database()
 
             updated_user = UsersModel.find_by_id(_id)
+
+            role = RolesModel.find_by_id(updated_user.role_id)
+            project = ProjectsModel.find_by_id(updated_user.project_id)
+
+            email_body = f"""
+                        Hello{updated_user.name}
+
+                        Congratulations! Your details have been updated in the DMS
+
+                        Your revised account details are as follows
+                        1. Email Address - {updated_user.email_address}
+                        2. Project - {project.project_name}
+                        3. Role - {role.role_name}
+
+                        If any of your details is/are wrong, please contact the Admin for the necessary corrections 
+                        to be  made 
+
+                        Thanks & Regards
+                        Vivekanand Seva Mandal DMS Communications
+                    """
+
+            AutomaticEmail.send_email(updated_user.email_address, "User Details Updated Successfully", email_body)
+
             return {
                        "id": updated_user.id,
                        "name": updated_user.name,
@@ -299,14 +320,28 @@ class UserCredentials(Resource):
             help="This is mandatory field",
         )
 
-        # user_credentials = credential_schema.load(request.get_json())
         user_data = parser.parse_args()
 
-        user_credentials_from_db = UsersModel.find_by_email_address(user_data['email_address'])
+        user_credentials_from_db = CredentialsModel.get_credential_by_email_address(user_data['email_address'])
         if user_credentials_from_db and user_credentials_from_db.password == user_data['password']:
             if user_data['new_password'] == user_data['confirm_new_password']:
                 user_credentials_from_db.password = user_data['new_password']
                 user_credentials_from_db.save_to_database()
+                user = UsersModel.find_by_email_address(user_credentials_from_db.email_address)
+
+                email_body = f"""
+                    Hello {user.name}
+                    
+                    Congratulations! Your password has been successfully updated
+                    
+                    Your new password is {user_data['new_password']}
+                    
+                    Thanks & Regards
+                    Vivekanand Seva Mandal DMS Communications
+                """
+
+                AutomaticEmail.send_email(user.email_address, "Password Changed Successfully", email_body)
+
                 return (
                     {
                         "message": f"The password was successfully updated!"
@@ -342,7 +377,7 @@ class UserLogin(Resource):
 
         # login_user = credential_schema.load(request.get_json())
 
-        user = UsersModel.find_by_email_address()
+        user = CredentialsModel.get_credential_by_email_address(login_details['email_address'])
 
         # Cloning the functionality of the authenticate() method
         if user and safe_str_cmp(user.password, login_details.password):
@@ -350,6 +385,11 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=user.id, fresh=True)
             refresh_token = create_refresh_token(user.id)
 
+            access_jti = get_jti(encoded_token=access_token)
+            refresh_jti = get_jti(encoded_token=refresh_token)
+            revoked_store.set(access_jti, 'false', ACCESS_EXPIRES * 1.2)
+            revoked_store.set(refresh_jti, 'false', REFRESH_EXPIRES * 1.2)
+            print(revoked_store)
             return {"access_token": access_token, "refresh_token": refresh_token}, 200
 
         return {"message": "Invalid credentials!"}, 401
@@ -357,11 +397,13 @@ class UserLogin(Resource):
 
 class UserLogout(Resource):
     @jwt_required
-    def post(self):
+    def delete(self):
         # get_raw_jwt() is a dictionary which has a key 'jti' inside it!
         # The value of this 'jti' is specifically the access token which we have to log out!
         logged_out_token = get_raw_jwt()["jti"]
-        LOGOUT.add(logged_out_token)
+        revoked_store.set(logged_out_token, 'true', ACCESS_EXPIRES * 1.2)
+        revoked_store.set(logged_out_token, 'true', REFRESH_EXPIRES * 1.2)
+        print(revoked_store)
         return {"message": "Successfully logged out from the system!"}, 200
 
 
@@ -370,4 +412,6 @@ class TokenRefresh(Resource):
     def post(self):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)
+        access_jti = get_jti(encoded_token=new_token)
+        revoked_store.set(access_jti, 'false', ACCESS_EXPIRES * 1.2)
         return {"access_token": new_token}, 200

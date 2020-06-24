@@ -8,16 +8,11 @@ class DonationsModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30), nullable=False, unique=False)
     date_of_donation = db.Column(db.DateTime, unique=False, nullable=False)
-    receipt_serial_number = db.Column(db.BIGINT, unique=True, nullable=False)
     mode_id = db.Column(
         db.Integer, db.ForeignKey("modes_of_donation.id"), nullable=False, unique=False
     )
     amount_in_figures = db.Column(db.Integer, nullable=False, unique=False)
     amount_in_words = db.Column(db.String(30), nullable=False, unique=False)
-    cheque_number = db.Column(db.String(8), nullable=True, unique=True)
-    cheque_date = db.Column(db.Date, nullable=True, unique=False)
-    date_of_credit = db.Column(db.DateTime, unique=False, nullable=True)
-    donor_bank = db.Column(db.String(20), nullable=True, unique=False)
     project_id = db.Column(
         db.Integer, db.ForeignKey("projects.id"), nullable=False, unique=False
     )
@@ -30,6 +25,10 @@ class DonationsModel(db.Model):
         "KindDonationModel", backref="donation", lazy="dynamic"
     )
 
+    cheque_donations = db.relationship(
+        "ChequeDonationsModel", backref="donation", lazy="dynamic"
+    )
+
     def __init__(
         self,
         _id: int,
@@ -38,9 +37,6 @@ class DonationsModel(db.Model):
         mode_id: int,
         amount_in_figures: int,
         amount_in_words: str,
-        cheque_number: str,
-        cheque_date,
-        donor_bank: str,
         project_id: int,
         donor_id: int,
     ):
@@ -50,9 +46,6 @@ class DonationsModel(db.Model):
         self.mode_id = (mode_id,)
         self.amount_in_figures = (amount_in_figures,)
         self.amount_in_words = (amount_in_words,)
-        self.cheque_number = (cheque_number,)
-        self.cheque_date = (cheque_date,)
-        self.donor_bank = (donor_bank,)
         self.project_id = (project_id,)
         self.donor_id = donor_id
 

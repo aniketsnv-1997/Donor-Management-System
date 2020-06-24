@@ -30,7 +30,7 @@ from dms.resources.donations.KindDonations import KindDonations, SingleKindDonat
 from dms.resources.donations.Modes import Modes, SingleMode
 
 from dms.models.users.UsersModel import UsersModel
-from dms.logout import LOGOUT
+from dms.logout import revoked_store
 
 jwt = JWTManager(app)
 
@@ -38,7 +38,7 @@ jwt = JWTManager(app)
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
     # TODO: Instead of 1, write the query to get id where user name is Vaishali Modak
-    if identity == 1:
+    if identity == 8:
         return {"is_admin": True}
 
     return {"is_admin": False}
@@ -47,7 +47,11 @@ def add_claims_to_jwt(identity):
 # To be used to check whether a token is logged out or not
 @jwt.token_in_blacklist_loader
 def check_token_in_logout(decrypted_token):
-    return decrypted_token["jti"] in LOGOUT
+    jti = decrypted_token['jti']
+    entry = revoked_store.get(jti)
+    if entry is None:
+        return True
+    return entry == 'true'
 
 
 # When JWT token sent by user to server is expired (a JWT token expired after 5 minutes)
@@ -133,5 +137,4 @@ api.add_resource(UserLogout, "/logout")
 
 if __name__ == "__main__":
     db.init_app(app)
-    # ma.init_app(app)
     app.run()

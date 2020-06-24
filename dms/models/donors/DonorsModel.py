@@ -101,10 +101,6 @@ class DonorsModel(db.Model):
     def find_by_id(cls, _id: str):
         return cls.query.filter_by(id=_id).first()
 
-    @classmethod
-    def commit_to_database(cls) -> None:
-        db.session.commit()
-
     def save_to_database(self) -> None:
         db.session.add(self)
         db.session.commit()

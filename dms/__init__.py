@@ -1,36 +1,41 @@
 from datetime import timedelta
 
 from flask import Flask
-from flask_mail import Mail
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-# from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/dms"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/dms", "postgres://mcoupsxf:PeOKXSXyCWERU8jsDjGAVdKvfQ61Jc1W@john.db.elephantsql.com:5432/mcoupsxf"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config[
-    "PROPAGATE_EXCEPTIONS"
-] = True  # This line enables the Flask app to identify errors and exceptions
+app.config["PROPAGATE_EXCEPTIONS"] = True  # This line enables the Flask app to identify errors and exceptions
 # related to FlaskJWT and then report them accordingly
+
+
+# Authentication related configuration values
 app.secret_key = "aniket"
 app.config["JWT_SECRET_KEY"] = "aniket"
 app.config["JWT_AUTH_URL_RULE"] = "/login"
-app.config["JWT_EXPIRATION_DELTA"] = timedelta(seconds=1800)
+ACCESS_EXPIRES = timedelta(minutes=15)
+REFRESH_EXPIRES = timedelta(days=30)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = REFRESH_EXPIRES
 app.config["JWT_BLACKLIST_ENABLE"] = True
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access", "refresh"]
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+
+# Email related configuration values
+app.config['MAIL_SERVER'] = 'smtp.mailgun.org'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'Aniket Sonavane'  # enter your email here
 app.config['MAIL_DEFAULT_SENDER'] = 'aniketsvsmecc@gmail.com' # enter your email here
-app.config['MAIL_PASSWORD'] = 'vian020213'   # enter your password here
+app.config['MAIL_PASSWORD'] = 'vian020213 '   # enter your password here
+
+# Linkages of the functionalities with the main flask app
 db = SQLAlchemy(app)
 api = Api(app)
-mail = Mail(app)
-# ma = Marshmallow()
+migrate = Migrate(app, db)
 
 from dms.models.donations.DonationsModel import DonationsModel
 from dms.models.donations.KindDonationsModel import KindDonationModel

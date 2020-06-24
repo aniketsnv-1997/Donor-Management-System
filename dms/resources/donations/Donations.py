@@ -1,4 +1,4 @@
-import werkzeug.datastructures
+from werkzeug.datastructures import MultiDict
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
 
@@ -9,6 +9,7 @@ from ...models.donations.ModesModel import MM
 
 class Donation(Resource):
     def get(self):
+
         donations = DonationsModel.get_all_donations()
         donations_list = []
 
@@ -73,10 +74,6 @@ class SingleDonation(Resource):
         )
 
         parser.add_argument(
-            "receipt_serial_number", type=int, required=True, help="This is a mandatory field"
-        )
-
-        parser.add_argument(
             "mode_id", type=int, required=True, help="This is a mandatory field"
         )
         parser.add_argument(
@@ -109,12 +106,10 @@ class SingleDonation(Resource):
             "project_id", type=int, required=False, help="This is a mandatory field"
         )
 
-        parser.add_argument (
-            "receipt_file", type=werkzeug.datastructures.FileStorage, required=True, help="This is a mandatory field"
-        )
-
         data = parser.parse_args()
+        general_donation_data = parser.parse_args()
 
+        # if MM.find_mode_name_by_id(general_donation_data['mode_id']) == 'Cash':
         cheque_date = dt.date(dt.strptime(data["cheque_date"], "%Y-%m-%d"))
         donation_date = dt.date(dt.strptime(data["date_of_donation"], "%Y-%m-%d"))
         credit_date = dt.date(dt.strptime(data["date_of_credit"], "%Y-%m-%d"))
@@ -125,7 +120,6 @@ class SingleDonation(Resource):
             None,
             data["donation_title"],
             donation_date,
-            data["receipt_serial_number"],
             data["mode_id"],
             data["amount_in_figures"],
             data["amount_in_words"],
@@ -140,11 +134,8 @@ class SingleDonation(Resource):
 
         new_donation.save_to_database()
 
-        new_donation_added = DonationsModel.find_by_title(data["donation_title"])
-        kind_mode_of_donation = MM.find_by_name("Kind")
-
-        if new_donation_added.id == kind_mode_of_donation.id:
-            return {"message": "The donation is a kind donation"}
+        if MM.check_for_kind_donation(data['mode_id']) == 'Kind':
+             print("aniket")
 
     def delete(self, _id):
         donation = DonationsModel.find_by_id(_id)

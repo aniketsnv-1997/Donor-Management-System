@@ -30,6 +30,14 @@ class MM(db.Model):
     def find_by_name(cls, name: str):
         return cls.query.filter_by(mode_name=name).first()
 
+    @classmethod
+    def check_for_kind_donation(cls, _id: int) -> str:
+        return cls.query.filter_by(id=_id).mode_name
+
+    @classmethod
+    def find_mode_name_by_id(cls, _id: int) -> str:
+        return cls.query.filter_by(id=_id).first().mode_name
+
     def save_to_database(self) -> None:
         db.session.add(self)
         db.session.commit()
