@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+{% block content %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Donors</title>
+    </head>
+
+    <body>
+        <ul>
+                {% for user in user_list %}
+                    <p><li>Name: {{ user.name }}</li></p>
+                    <p><li>Email Address: {{ user.email_address }}</li></p>
+                    <p><li>Project: {{ user.project_id }}</li></p>
+                    <p><li>Priviliges: {{ user.rights_id }}</li></p>
+                {%  endfor %}
+        </ul>
+    </body>
+</html>
+{% endblock %}

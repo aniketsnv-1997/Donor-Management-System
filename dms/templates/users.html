@@ -1,0 +1,61 @@
+{% extends "header.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Users</title>
+    </head>
+
+    <body>
+        <ul>
+            {% for user in user_list %}
+                <div class="container bg-light">
+                    <div class="row p-2">
+                        <!--DONOR'S CONTACT DETAILS-->
+                         <div class="p-4 ml-4 ">
+                              <div class="p-1 row">
+                                  <i class="material-icons" style="font-size:36px;color:orange">person</i>
+                                  <h4>{{ user.name }}</h4>
+                              </div>
+
+                              <div class="p-1 row">
+                                  <i class="material-icons" style="font-size:36px;color:orange">email</i>
+                                  <h4>{{ user.email_address }}</h4>
+                              </div>
+
+                              <div class="p-1 row">
+                                  <i class="material-icons" style="font-size:36px;color:orange">work</i>
+                                  <h4>{{ user.project_id }}</h4>
+                              </div>
+
+                              <div class="p-1 row">
+                                  <i class="material-icons" style="font-size:36px;color:orange">article</i><
+                                  <h4>{{ user.rights_id }}</h4>
+                              </div>
+                         </div>
+
+                         <!--buttons-->
+                         <div class="col-md-7 text-center p-4">
+                             <div class="float-right">
+                                 <div class="p-1 ">
+                                     <button onclick="{{ url_for("singleuser", _id = user.id) }}" class="btn btn-secondary" style="color:orange" type="submit" formmethod="delete" id="" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                        {{ url_for("singleuser", _id = user.id) }}
+                                     </button>
+                                 </div>
+                                 <div class="p-1">
+                                     <button class="btn btn-secondary" style="color:orange" type="button" id="" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                                         Update
+                                     </button>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            {%  endfor %}
+        </ul>
+    </body>
+ </html>
+{% endblock %}
+

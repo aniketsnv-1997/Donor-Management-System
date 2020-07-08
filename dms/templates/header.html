@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>header</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/carousel/">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+ 
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="text-center bg-light p-1" style="color:orange">
+        <h1><p>
+            <b>VIVEKANAND SEVA MANDAL'S</b>
+            </p>
+        </h1>
+    </div>
+
+    <div class=" text-center bg-light p-1" style="color:orange">
+        <h2><p>
+            <b>Donor Management System</b>
+           </p>
+        </h2>
+    </div>
+
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark " style="background-color:orange">
+            <div class="container">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse " id="navbarCollapse">
+                <ul class="navbar-nav ml-auto ">
+                    <li class="nav-item ">
+                        <div class="dropdown p-1">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                USERS
+                            </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">USERS</a>
+                                    <a class="dropdown-item" href="#">RIGHTS</a>
+                                    <a class="dropdown-item" href="#">TYPES</a>
+                                    <a class="dropdown-item" href="#">PROJECTS</a>
+                                    <a class="dropdown-item" href="#">ROLES</a>
+                                </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item ">
+                        <div class="dropdown p-1">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                DONORS
+                            </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">DONORS</a>
+                                        <a class="dropdown-item" href="#">REFERENCES</a>
+                                </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <div class="dropdown p-1 ">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                DONATIONS
+                            </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">DONATIONS</a>
+                                    <a class="dropdown-item" href="#">MODE</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {% block content %}
+
+    {% endblock %}
+</body>
