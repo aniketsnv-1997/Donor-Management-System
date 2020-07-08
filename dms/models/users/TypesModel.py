@@ -1,4 +1,4 @@
-from dms import db
+from dms.app import db
 from .ProjectsModel import ProjectsModel
 from typing import Dict, List
 

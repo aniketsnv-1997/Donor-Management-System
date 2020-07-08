@@ -1,6 +1,5 @@
 from datetime import datetime as dt
-
-from dms import db
+from dms.app import db
 from typing import Dict, List
 
 

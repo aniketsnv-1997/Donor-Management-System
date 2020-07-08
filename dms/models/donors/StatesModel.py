@@ -1,4 +1,4 @@
-from dms import db
+from dms.app import db
 
 
 class StateModel(db.Model):

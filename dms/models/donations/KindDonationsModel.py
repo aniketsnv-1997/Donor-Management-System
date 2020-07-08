@@ -1,4 +1,4 @@
-from dms import db
+from dms.app import db
 
 
 class KindDonationModel(db.Model):
@@ -20,7 +20,7 @@ class KindDonationModel(db.Model):
         quantity: float,
         unit: str,
         donation_id: int,
-        create_date,
+        create_date: str,
     ):
         self.id = _id
         self.item = (item,)

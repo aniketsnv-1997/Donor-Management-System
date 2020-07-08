@@ -4,6 +4,7 @@ from datetime import datetime as dt
 
 from ...models.donations.DonationsModel import DonationsModel
 from ...models.donations.KindDonationsModel import KindDonationModel
+from ...models.donations.ChequeDonationsModel import ChequeDonationsModel
 from ...models.donations.ModesModel import MM
 
 
@@ -76,29 +77,7 @@ class SingleDonation(Resource):
         parser.add_argument(
             "mode_id", type=int, required=True, help="This is a mandatory field"
         )
-        parser.add_argument(
-            "amount_in_figures",
-            type=int,
-            required=True,
-            help="This is a mandatory field",
-        )
-        parser.add_argument(
-            "amount_in_words", type=str, required=True, help="This is a mandatory field"
-        )
-        parser.add_argument(
-            "cheque_number", type=str, required=True, help="This is a mandatory field"
-        )
-        parser.add_argument(
-            "cheque_date", type=str, required=False, help="This is a mandatory field"
-        )
 
-        parser.add_argument(
-            "date_of_credit", type=str, required=False, help="This is a mandatory field"
-        )
-
-        parser.add_argument(
-            "donor_bank", type=str, required=True, help="This is a mandatory field"
-        )
         parser.add_argument(
             "donor_id", type=int, required=True, help="This is a mandatory field"
         )
@@ -106,36 +85,68 @@ class SingleDonation(Resource):
             "project_id", type=int, required=False, help="This is a mandatory field"
         )
 
-        data = parser.parse_args()
         general_donation_data = parser.parse_args()
-
-        # if MM.find_mode_name_by_id(general_donation_data['mode_id']) == 'Cash':
-        cheque_date = dt.date(dt.strptime(data["cheque_date"], "%Y-%m-%d"))
-        donation_date = dt.date(dt.strptime(data["date_of_donation"], "%Y-%m-%d"))
-        credit_date = dt.date(dt.strptime(data["date_of_credit"], "%Y-%m-%d"))
-        print(cheque_date)
-        print(type(cheque_date))
-
+        donation_date = dt.date(dt.strptime(general_donation_data["date_of_donation"], "%Y-%m-%d"))
         new_donation = DonationsModel(
             None,
-            data["donation_title"],
+            general_donation_data["donation_title"],
             donation_date,
-            data["mode_id"],
-            data["amount_in_figures"],
-            data["amount_in_words"],
-            data["cheque_number"],
-            cheque_date,
-            credit_date,
-            data["donor_bank"],
-            data["project_id"],
-            data["donor_id"],
+            general_donation_data["mode_id"],
+            general_donation_data['donor_id'],
+            general_donation_data['project_id'],
             dt.now()
         )
 
         new_donation.save_to_database()
+        donation_added = DonationsModel.find_by_title(general_donation_data['donation_title'])
 
-        if MM.check_for_kind_donation(data['mode_id']) == 'Kind':
-             print("aniket")
+        if MM.find_mode_name_by_id(donation_added.mode_id) == "Kind":
+            print("Donation is in Kind format")
+
+        elif MM.find_mode_name_by_id(general_donation_data['mode_id']) == 'Cash':
+            parser.add_argument(
+                "amount_in_figures",
+                type=int,
+                required=True,
+                help="This is a mandatory field",
+            )
+            parser.add_argument(
+                "amount_in_words", type=str, required=True, help="This is a mandatory field"
+            )
+
+        elif MM.find_mode_name_by_id(donation_added.mode_id) == "Cheque":
+            parser.add_argument(
+                "amount_in_figures",
+                type=int,
+                required=True,
+                help="This is a mandatory field",
+            )
+            parser.add_argument(
+                "amount_in_words", type=str, required=True, help="This is a mandatory field"
+            )
+            parser.add_argument(
+                "cheque_number", type=str, required=True, help="This is a mandatory field"
+            )
+            parser.add_argument(
+                "cheque_date", type=str, required=False, help="This is a mandatory field"
+            )
+
+            parser.add_argument(
+                "date_of_credit", type=str, required=False, help="This is a mandatory field"
+            )
+
+            parser.add_argument(
+                "donor_bank", type=str, required=True, help="This is a mandatory field"
+            )
+
+            cheque_donation_details = parser.parse_args()
+            cheque_date = dt.date(dt.strptime(cheque_donation_details["cheque_date"], "%Y-%m-%d"))
+            credit_date = dt.date(dt.strptime(cheque_donation_details["date_of_credit"], "%Y-%m-%d"))
+
+            new_cheque_donation = ChequeDonationsModel(None, cheque_donation_details['cheque_number'], cheque_date,
+                                                       cheque_donation_details['amount_in_figures'], cheque_donation_details['amount_in_words'],
+                                                       credit_date, cheque_donation_details['donor_bank'], donation_added.id, dt.now())
+            new_cheque_donation.save_to_database()
 
     def delete(self, _id):
         donation = DonationsModel.find_by_id(_id)

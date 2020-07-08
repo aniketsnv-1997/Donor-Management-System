@@ -1,5 +1,6 @@
-from dms import db
+from dms.app import db
 from .KindDonationsModel import KindDonationModel
+from .ChequeDonationsModel import ChequeDonationsModel
 
 
 class DonationsModel(db.Model):
@@ -11,8 +12,7 @@ class DonationsModel(db.Model):
     mode_id = db.Column(
         db.Integer, db.ForeignKey("modes_of_donation.id"), nullable=False, unique=False
     )
-    amount_in_figures = db.Column(db.Integer, nullable=False, unique=False)
-    amount_in_words = db.Column(db.String(30), nullable=False, unique=False)
+
     project_id = db.Column(
         db.Integer, db.ForeignKey("projects.id"), nullable=False, unique=False
     )
@@ -39,6 +39,7 @@ class DonationsModel(db.Model):
         amount_in_words: str,
         project_id: int,
         donor_id: int,
+        create_date: str,
     ):
         self.id = (_id,)
         self.donation_title = (donation_title,)
@@ -48,6 +49,7 @@ class DonationsModel(db.Model):
         self.amount_in_words = (amount_in_words,)
         self.project_id = (project_id,)
         self.donor_id = donor_id
+        self.create_date = create_date
 
     @classmethod
     def get_all_donations(cls):

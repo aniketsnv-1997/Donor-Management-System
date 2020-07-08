@@ -1,7 +1,5 @@
 from requests import Response, post
 from flask import url_for, request, redirect
-from flask_mail import Message
-from dms import mail
 
 
 class AutomaticEmailException(Exception):

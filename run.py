@@ -1,5 +1,3 @@
-from dms import app, api, db, jwt
-
 # Third Party Library Imports
 from flask import jsonify
 from flask_jwt_extended import JWTManager

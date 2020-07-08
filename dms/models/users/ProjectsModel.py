@@ -1,4 +1,4 @@
-from dms import db
+from dms.app import db
 from .UsersModel import UsersModel
 from ..donations.DonationsModel import DonationsModel
 
