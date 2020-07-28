@@ -1,7 +1,9 @@
 from flask_restful import reqparse, Resource
+from flask import render_template, make_response, request
 from datetime import datetime as dt
 
 from dms.models.users.ProjectsModel import ProjectsModel
+from dms.models.users.TypesModel import TypesModel
 
 
 class Projects(Resource):
@@ -28,6 +30,13 @@ class Projects(Resource):
         return {"message": f"No projects exist in the system as of now!"}, 404
 
 
+class ShowProjectsForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./users/forms/project_form.html", title="Add Project/Activity/Type",
+                                             types=TypesModel.get_all_types()), 200, headers)
+
+
 class SingleProject(Resource):
     def get(self, _id):
         project = ProjectsModel.find_by_id(_id)
@@ -48,52 +57,34 @@ class SingleProject(Resource):
         return {"message": f"Project with {_id} is not present in the system!"}, 404
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "name",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "description",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "type_id",
-            type=int,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        data = parser.parse_args()
+        project_name = ""
+        description = ""
+        type_id = 0
 
-        if ProjectsModel.find_by_name(data["name"]):
-            return (
-                {
-                    "message": f"Project with name {data['name']} is already present in the system!"
-                },
-                400,
-            )
+        if request.method == "POST":
+            project_name = request.form.get("project_name")
+            description = request.form.get("description")
+            type_id = request.form.get("type_id")
+
+        if ProjectsModel.find_by_name(project_name):
+            message = f"The project {project_name} is already present in the system"
+            headers = {'Content-Type': 'text/html'}
+            return make_response(render_template('./users/view after add/new_project_added.html',
+                                                 message=message, ), 201, headers)
 
         new_project = ProjectsModel(
-            None, data["name"], data["description"], data["type_id"], dt.now(), None
+            None, project_name, description, type_id, dt.now(), None
         )
         new_project.save_to_database()
 
-        new_project_added = ProjectsModel.find_by_name(data["name"])
-        return (
-            {
-                "id": new_project_added.id,
-                "project_name": new_project_added.project_name,
-                "description": new_project_added.description,
-                "type_id": new_project_added.type_id,
-                "create_date": str(new_project_added.create_date),
-                "update_date": str(new_project_added.update_date),
-            },
-            201,
-        )
+        new_project_added = ProjectsModel.find_by_name(project_name)
+
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('./users/view after add/new_project_added.html',
+                                             project_name=new_project_added.project_name,
+                                             description=new_project_added.description,
+                                             type_name=TypesModel.find_by_id(new_project.type_id).type_name, ),
+                             201, headers)
 
     def delete(self, _id):
         project = ProjectsModel.find_by_id(_id)

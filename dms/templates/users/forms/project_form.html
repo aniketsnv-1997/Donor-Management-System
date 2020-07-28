@@ -1,0 +1,49 @@
+{% extends "header_admin.html" %}
+
+{% block content %}
+    {{ super() }}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+	        <title>{{title}}</title>
+{#            <link rel="stylesheet" type="text/css" href="{{url_for("static", filename="css/project_types.css")}}">#}
+{#            <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">#}
+{#            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
+{##}
+{#            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#}
+{#            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>#}
+{#            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>#}
+{#            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
+        </head>
+
+        <body>
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <form action="{{ url_for("singleproject") }}" method="post">
+                        <h2 class="text-center mt-1" style="color: orange;"><b>Projects Form</b></h2>
+                        <label><b>Project Name*:</b></label>
+                        <input type="text" name="project_name" class="txt" placeholder="Project/Event/Activity Name" required="Please enter a valid name" required />
+                      
+                        <br />
+
+                        <label><b>Description*:</b></label>
+                        <input type="text" name="description" class="txt" placeholder="Enter the Project/Event/Activity Description" required />
+                      
+                        <br />
+
+                        <div class="form-group">
+                            <label for="type"><b>Type*:</b></label>
+                                <select class="form-control" id="types_of_projects" name="type_id">
+                                    {% for type in types %}
+                                        <option value={{ type.id }}>{{type.type_name}}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+
+                        <input type="submit" name="submit" value="Submit Project" class="registerbtn" style="background-color: orange"/><br />
+                    </form>
+                </div>
+            </div>
+        </body>
+    </html>
+{% endblock %}

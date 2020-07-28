@@ -1,0 +1,23 @@
+{% extends 'header_admin.html' %}
+
+{% block content %}
+<!doctype html>
+    {{ super() }}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{{ title }}</title>
+        </head>
+
+        <body>
+            <div id="header"></div>
+            <div class="container-fluid" style="color: orange;">
+                <h3 class="text-center text-justify p-3">Congratulations the data has been saved!</h3>
+                <h4 class="text-center text-justify">Mode Type: {{mode_name}}</h4>
+{#                <h4 class="text-center text-justify">Type:XYZ</h4>#}
+            </div>
+        </body>
+    </html>
+{% endblock %}

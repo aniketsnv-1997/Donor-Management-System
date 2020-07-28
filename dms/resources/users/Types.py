@@ -1,4 +1,5 @@
 from flask_restful import reqparse, Resource
+from flask import make_response, render_template
 from datetime import datetime as dt
 
 from ...models.users.TypesModel import TypesModel
@@ -26,6 +27,12 @@ class Types(Resource):
             return {"types": type_list}, 200
 
         return {"message": "No types exist in the system as of now!"}, 404
+
+
+class ShowTypesForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("add_types.html", title="Add Types"), 200, headers)
 
 
 class SingleType(Resource):

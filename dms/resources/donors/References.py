@@ -1,4 +1,5 @@
 from flask_restful import reqparse, Resource
+from flask import make_response, render_template
 from datetime import datetime as dt
 
 from dms.models.donors.ReferencesModel import ReferenceModel
@@ -24,6 +25,12 @@ class Reference(Resource):
             return {"references": references_list}, 200
 
         return {"message": "There are no references present in the system!"}, 404
+
+
+class ShowReferenceForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("add_references.html", title="Add Reference"), 200, headers)
 
 
 class SingleReference(Resource):

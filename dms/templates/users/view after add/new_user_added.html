@@ -1,0 +1,34 @@
+{% extends 'header_admin.html' %}
+
+{% block content %}
+<!doctype html>
+    {{ super() }}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{{ title }}</title>
+        </head>
+
+        <body>
+            <div id="header"></div>
+            <div class="container-fluid" style="color: orange;">
+                {% if message %}
+                    <h3 class="text-center text-justify p-3">Sorry! The user could not be added into the system due to the reason mentioned below, Please contact the System Admin to resolve this</h3>
+                    <h3 class="text-center text-justify p-3">{{ message }}</h3>
+
+                {% else %}
+                    <h4 class="text-center text-justify">Congratulations! A new user has been added into the system!</h4>
+                    <h4 class="text-center text-justify">Name: {{name}}</h4>
+                    <h4 class="text-center text-justify">Email Address: {{Email_address}}</h4>
+                    <h4 class="text-center text-justify">Project: {{project}}</h4>
+                    <h4 class="text-center text-justify">Role: {{role}}</h4>
+                    <h4 class="text-center text-justify">Rights: {{right}}</h4>
+
+                {% endif %}
+{#                <h4 class="text-center text-justify">Type:XYZ</h4>#}
+            </div>
+        </body>
+    </html>
+{% endblock %}

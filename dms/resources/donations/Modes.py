@@ -1,5 +1,5 @@
-from flask import jsonify
-from flask_restful import reqparse, Resource
+from flask import jsonify, make_response, render_template
+from flask_restful import Resource, request
 from datetime import datetime as dt
 
 from ...models.donations.ModesModel import MM
@@ -33,6 +33,12 @@ class Modes(Resource):
         )
 
 
+class ShowDonationModesForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./donations/forms/add_donation_mode.html", title="Add a donation mode"), 200, headers)
+
+
 class SingleMode(Resource):
     def get(self, _id):
         mode = MM.find_by_id(_id)
@@ -54,34 +60,27 @@ class SingleMode(Resource):
         )
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "mode_name", type=str, required=True, help="This is a mandatory field!"
-        )
+        mode_name = ""
 
-        data = parser.parse_args()
+        if request.method == "POST":
+            mode_name = request.form.get("mode_name")
 
-        if MM.find_by_name(data["mode_name"]):
+        if MM.find_by_name(mode_name):
             return (
                 {
-                    "message": f"Mode with name {data['mode_name']} is already present in the system!"
+                    "message": f"Mode with name {mode_name} is already present in the system!"
                 },
                 400,
             )
 
-        new_mode = MM(None, data["mode_name"], dt.now(), None)
+        new_mode = MM(None, mode_name, dt.now(), None)
         new_mode.save_to_database()
 
-        new_mode_added = MM.find_by_name(data["mode_name"])
-        return (
-            {
-                "id": new_mode_added.id,
-                "mode_name": new_mode_added.mode_name,
-                "create_date": str(new_mode_added.create_date),
-                "update_date": new_mode_added.update_date,
-            },
-            201,
-        )
+        new_mode_added = MM.find_by_name(mode_name)
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('./users/view after add/new_mode_added.html',
+                                             title="New Mode Added Details",
+                                             mode_name=new_mode_added.mode_name), 200, headers)
 
     def delete(self, _id):
         mode = MM.find_by_id(_id)

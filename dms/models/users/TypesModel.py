@@ -24,7 +24,7 @@ class TypesModel(db.Model):
         self.update_date = update_date
 
     @classmethod
-    def get_all_types(cls) -> None:
+    def get_all_types(cls):
         return cls.query.all()
 
     @classmethod

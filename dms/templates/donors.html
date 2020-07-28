@@ -1,21 +1,190 @@
 <!DOCTYPE html>
+<html>
+<head>
+	<title>Donor Registration</title>
+</head>
+<link rel="stylesheet" type="text/css" href="donors.css">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-{% block content %}
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Donors</title>
-    </head>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+    <div class="text-center bg-light p-1" style="color:orange">
+        <h1><p>
+            <b>VIVEKANAND SEVA MANDAL'S</b>
+            </p>
+        </h1>
+    </div>
 
-    <body>
-        <ul>
-                {% for user in user_list %}
-                    <p><li>Name: {{ user.name }}</li></p>
-                    <p><li>Email Address: {{ user.email_address }}</li></p>
-                    <p><li>Project: {{ user.project_id }}</li></p>
-                    <p><li>Priviliges: {{ user.rights_id }}</li></p>
-                {%  endfor %}
-        </ul>
-    </body>
+
+    <div class=" text-center bg-light p-1" style="color:orange">
+        <h2><p>
+            <b>Donor Management System</b>
+           </p>
+        </h2>
+    </div>
+
+    
+      <nav class="navbar navbar-expand-md navbar-dark " style="background-color:orange">
+          <div class="container">
+
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="collapse navbar-collapse " id="navbarCollapse">
+                  <ul class="navbar-nav ml-auto ">
+                      <li class="nav-item ">
+                          <div class="dropdown p-1">
+                              <button class="btn btn-secondary dropdown-toggle active" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                USERS
+                              </button>
+
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                  <a class="dropdown-item" href="#">USERS</a>
+                                  <a class="dropdown-item" href="#">RIGHTS</a>
+                                  <a class="dropdown-item" href="project_types.html">TYPES</a>
+                                  <a class="dropdown-item active" href="#">PROJECTS</a>
+                                  <a class="dropdown-item" href="roles.html">ROLES</a>
+                              </div>
+                          </div>
+                      </li>
+
+                      <li class="nav-item <?php if($page=='event'){echo('active');} ?>">
+                          <div class="dropdown p-1">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                DONORS
+                              </button>
+
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  <a class="dropdown-item" href="#">DONORS</a>
+                                  <a class="dropdown-item" href="#">REFERENCES</a>
+                              </div>
+                         </div>
+                      </li>
+
+                      <li class="nav-item <?php if($page=='about'){echo('active');} ?>">
+                          <div class="dropdown p-1 ">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  DONATIONS
+                              </button>
+
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  <a class="dropdown-item" href="#">DONATIONS</a>
+                                  <a class="dropdown-item" href="#">MODE</a>
+                              </div>
+                          </div>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+</header>
+
+<div class="container">
+	<div class="col-sm-6">
+		<form method="post">
+			<h2 class="text-center mt-1" style="color: orange;"><b>Donor Registration Form</b></h2>
+			<label for="name"><b>Name*:</b></label>
+		    <input type="text" placeholder="Enter Your Name" name="name" required>
+		   
+            <br>
+            <label for="name"><b>Email*:</b></label>
+		    <input type="email" placeholder="Enter Your Email" name="email" required>
+		    		
+			     <br>
+            <label for="Gender"><b>Gender*:</b></label><br>
+		    <input type="radio" name="gender" value="male"> Male<br>
+  			<input type="radio" name="gender" value="female"> Female<br>
+  			<input type="radio" name="gender" value="other"> Other<br>
+
+		    		
+			<br>
+            <label for="dob"><b>Date Of Birth*:</b></label><br>
+		    <input type="date" placeholder="Enter Your date of birth" name="dob" required><br>
+		    		
+			<br>
+            <label for="doa"><b>Date Of Anniversary:</b></label><br>
+		    <input type="date" placeholder="Enter Your date of anniversary" name="doa" required ><br>
+		    <label for="name"><b>Pan Number</b></label>
+		    <input type="text" placeholder="Enter Your Name" name="pan" id="pan" required >
+		    
+            <br>
+            <label for="uid"><b>Adhar/UID*:</b></label><br>
+		    <input type="text" placeholder="Enter Your Adhaar number" name="uid" minlength="12" maxlength="12" required >
+		    
+            <br>
+            <label for="Country code"><b>Country ID*:</b></label><br>
+		    <input type="text" placeholder="+" style="width:15%;" minlength="3" maxlength="3" name="cid" required >
+		    
+            <br>
+            <label for="phone"><b>Phone Number*:</b></label><br>
+		    <input type="text" placeholder="Enter Your Phone number" minlength="10" maxlength="10" name="phone" required >
+		    
+            <br>
+            <label for="refid"><b>Refrence ID*:</b></label><br>
+		    <select name="refid">
+		    	<option value="1"> ABCD</option>
+		    </select>
+		    
+            <br>
+            <label for="refname"><b>Refrrer Name*:</b></label><br>
+		    <input type="text" placeholder="Enter Your Reffrer name" name="refname" required >
+		    
+            <br>
+            <label for="add1"><b>Address Line 1*:</b></label><br>
+        <input type="text" placeholder="Enter Your First address line" name="add1" required >
+         
+            <br>
+            <label for="add2"><b>Address Line 2*:</b></label><br>
+		    <input type="text" placeholder="Enter Your Second address line" name="add2" required >
+		    
+            <br>
+            <label for="city"><b>City*:</b></label><br>
+		    <input type="text" placeholder="Enter Your City" name="city" required >
+		    
+            <br>
+            <label for="state"><b>State*:</b></label><br>
+		    <select name="state">
+		    	<option value="1"> ABCD</option>
+		    </select>
+		    
+            <br>
+            <label for="country"><b>Country*:</b></label><br>
+		    <select name="country">
+		    	<option value="1"> ABCD</option>
+		    </select>
+		    
+            <br>
+            <label for="pincode"><b>Pincode*:</b></label>
+		    <input type="text" placeholder="Enter Your Pincode" minlength="6" maxlength="6" name="pincode" required >
+		    
+            <br>
+            <input type="submit" name="submit" value="Create User" class="registerbtn" style="background-color: orange"/><br />
+            
+		</form>
+	</div>
+</div>
+<?php $page='home'; include('dmsfooter.php'); ?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#pan").change(function () {
+var inputvalues = $(this).val();
+  var regex = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+  if(!regex.test(inputvalues)){
+  $(".pan").val("");
+  alert("invalid PAN no");
+  return regex.test(inputvalues);
+  }
+});
+
+});
+</script>
+</body>
 </html>
-{% endblock %}

@@ -1,5 +1,7 @@
-from flask_restful import reqparse, Resource
+from flask_restful import request, Resource
+from flask import make_response, render_template
 from datetime import datetime as dt
+import pdfkit
 
 from dms.models.users.RolesModel import RolesModel
 
@@ -28,6 +30,12 @@ class Roles(Resource):
         return {"message": f"No roles present in the system!"}, 404
 
 
+class ShowRolesForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./users/forms/add_role.html", title="Add Role"), 200, headers)
+
+
 class SingleRole(Resource):
     def get(self, _id):
         role = RolesModel.find_by_id(_id)
@@ -47,48 +55,33 @@ class SingleRole(Resource):
         return {"message": f"Role with id {_id} is not available in the system!"}, 404
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "role_name",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "description",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
+        role_name = ""
+        description = ""
 
-        data = parser.parse_args()
+        if request.method == "POST":
+            role_name = request.form.get("role_name")
+            description = request.form.get("description")
 
-        role = RolesModel.find_by_name(data["role_name"])
+        role = RolesModel.find_by_name(role_name)
 
         if role:
-            return (
-                {
-                    "message": f"Role with name {data['role_name']} is already present in the system!"
-                },
-                400,
+            message = f"The role {role.role_name} is already present in the system"
+            headers = {'Content-Type': 'text/html'}
+            return make_response(render_template('./users/view after add/new_role_added.html',
+                                                 message=message,), 405, headers)
+
+        else:
+            new_role = RolesModel(
+                None, role_name, description, dt.now(), None
             )
 
-        new_role = RolesModel(
-            None, data["role_name"], data["description"], dt.now(), None
-        )
-        new_role.save_to_database()
-
-        new_role_added = RolesModel.find_by_name(data["role_name"])
-        return (
-            {
-                "id": new_role_added.id,
-                "role_name": new_role_added.role_name,
-                "description": new_role_added.description,
-                "create_date": str(new_role_added.create_date),
-                "update_date": str(new_role_added.update_date),
-            },
-            201,
-        )
+            new_role.save_to_database()
+            new_role_added = RolesModel.find_by_name(role_name)
+            headers = {'Content-Type': 'text/html'}
+            make_response(render_template('./users/view after add/new_role_added.html',
+                                                 role_name=new_role_added.role_name,
+                                                 description=new_role_added.description), 201, headers)
+            return pdfkit.from_url("http://127.0.0.1:5000/add%role", "test.pdf")
 
     def delete(self, _id):
         role = RolesModel.find_by_id(_id)

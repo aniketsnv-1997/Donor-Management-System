@@ -48,12 +48,13 @@ jwt = JWTManager(app)
 from flask import jsonify
 
 # Imports from user related Resources
-from dms.resources.users.Projects import Projects, SingleProject
-from dms.resources.users.Rights import Rights, SingleRight
-from dms.resources.users.Types import Types, SingleType
-from dms.resources.users.Roles import Roles, SingleRole
+from dms.resources.users.Projects import Projects, SingleProject, ShowProjectsForm
+from dms.resources.users.Rights import Rights, SingleRight, ShowAccessRightsForm
+from dms.resources.users.Types import Types, SingleType, ShowTypesForm
+from dms.resources.users.Roles import Roles, SingleRole, ShowRolesForm
 from dms.resources.users.User import (
     Users,
+    ShowUsersForm,
     SingleUser,
     UserLogin,
     UserCredentials,
@@ -63,17 +64,18 @@ from dms.resources.users.User import (
 
 # Imports from donor related Resources
 from dms.resources.donors.Donors import Donors, SingleDonor
-from dms.resources.donors.References import Reference, SingleReference
+from dms.resources.donors.References import Reference, SingleReference, ShowReferenceForm
 from dms.resources.donors.States import State, SingleState
 from dms.resources.donors.Country import Country, SingleCountry
 
 # Imports from donations related Resources
 from dms.resources.donations.Donations import Donation, SingleDonation
 from dms.resources.donations.KindDonations import KindDonations, SingleKindDonation
-from dms.resources.donations.Modes import Modes, SingleMode
+from dms.resources.donations.Modes import Modes, SingleMode, ShowDonationModesForm
 
 from dms.logout import BLACKLIST
 from dms.resources.homepage import HomePage
+
 
 # Used to add some more values and functionalities to the existing JWT token, like admin and user access
 @jwt.user_claims_loader
@@ -86,7 +88,6 @@ def add_claims_to_jwt(identity):
 
 
 # To be used to check whether a token is logged out or not
-@jwt.token_in_blacklist_loader
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     return decrypted_token['jti'] in BLACKLIST
@@ -124,25 +125,31 @@ def revoked_token_callback():
 api.add_resource(HomePage, "/")
 
 api.add_resource(Users, "/users")
+api.add_resource(ShowUsersForm, "/add%a%new%user")
 api.add_resource(SingleUser, "/users/<int:_id>", "/users")
 api.add_resource(UserCredentials, "/change%password")
 
 api.add_resource(Projects, "/projects")
+api.add_resource(ShowProjectsForm, "/add%project")
 api.add_resource(SingleProject, "/projects/<int:_id>", "/projects")
 
 api.add_resource(Roles, "/roles")
+api.add_resource(ShowRolesForm, "/add%role")
 api.add_resource(SingleRole, "/roles/<int:_id>", "/roles")
 
 api.add_resource(Rights, "/rights")
+api.add_resource(ShowAccessRightsForm, "/add%access%rights")
 api.add_resource(SingleRight, "/rights/<int:_id>", "/rights")
 
 api.add_resource(Types, "/types")
+api.add_resource(ShowTypesForm, "/add%project%type")
 api.add_resource(SingleType, "/types/<int:_id>", "/types")
 
 api.add_resource(Country, "/country")
 api.add_resource(SingleCountry, "/country/<int:_id>", "/country")
 
 api.add_resource(Reference, "/references")
+api.add_resource(ShowReferenceForm, "/add%a%new%reference")
 api.add_resource(SingleReference, "/references/<int:_id>", "/references")
 
 api.add_resource(State, "/states")
@@ -158,6 +165,7 @@ api.add_resource(KindDonations, "/kind_donations")
 api.add_resource(SingleKindDonation, "/kind_donations/<int:id>")
 
 api.add_resource(Modes, "/modes")
+api.add_resource(ShowDonationModesForm, "/add%a%donation%mode")
 api.add_resource(SingleMode, "/modes/<int:_id>", "/modes")
 
 api.add_resource(UserLogin, "/login")

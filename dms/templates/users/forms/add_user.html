@@ -1,0 +1,87 @@
+{% extends "header_admin.html" %}
+{% block content %}
+    {{ super() }}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{{title}}</title>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+{#          <link rel="stylesheet" type="text/css" href="dms.css">#}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        </head>
+
+        <div>
+            <div id="header"></div>
+                <form class="container d-flex justify-content-center">
+                    <div class="col-sm-6">
+                        <h2 class="text-center mt-1" style="color: orange;">
+                            <b>Add User</b>
+                        </h2>
+
+                        <form action="{{ url_for("singleuser") }}" method="post">
+                            <label for="name"><b>Name:</b></label>
+                            <input type="text" placeholder="Enter Your Name" name="name" id="name" pattern="[A-Za-z]+" required>
+
+                            <label for="email"><b>Email:</b></label>
+                            <input type="email" placeholder="Enter Email" name="email_address" id="email" required>
+
+                            <!--java script for password matching-->
+                            <script>
+                                var check = function() {
+                                    if (document.getElementById('password').value ===
+                                        document.getElementById('confirm_password').value) {
+                                        document.getElementById('message').style.color = 'green';
+                                        document.getElementById('message').innerHTML = 'matching';
+                                    } else {
+                                        document.getElementById('message').style.color = 'red';
+                                        document.getElementById('message').innerHTML = 'not matching';
+                                    }
+                                }
+                            </script>
+
+                            <label for="psw"><b>Password:</b></label>
+                            <input type="password" placeholder="Enter Password" name="password" id="password" onkeyup='check();'  required>
+
+                            <label for="psw-repeat"><b>Confirm Password:</b></label>
+                            <input type="password" placeholder="Repeat Password" name="confirm_password" id="confirm_password" onkeyup='check();'  required>
+                            <span id='message'></span>
+
+                            <br>
+
+                            <div class="form-group">
+                                <label for="sel1"><b>Role:</b></label>
+                                <select class="form-control" id="role" type="role" name="role" required>
+                                    {% for role in roles %}
+                                            <option value={{ role.id }}>{{role.role_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sel1"><b>Project:</b></label>
+                                <select class="form-control" id="project" type="project" name="project" required>
+                                     {% for project in projects %}
+                                            <option value={{ project.id }}>{{project.project_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sel1"><b>Rights:</b></label>
+                                <select class="form-control" id="rights" type="rights" name="rights" required>
+                                     {% for right in rights %}
+                                            <option value={{ right.id }}>{{right.rights_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <button type="submit" name="submit" value="Submit User" class="registerbtn" style="background-color: orange">Submit</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </body>
+    </html>
+{% endblock %}

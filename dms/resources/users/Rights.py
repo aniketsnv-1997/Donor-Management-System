@@ -1,5 +1,6 @@
-from flask_restful import reqparse, Resource
+from flask_restful import Resource, request
 from datetime import datetime as dt
+from flask import render_template, make_response
 
 from dms.models.users.RightsModel import RightsModel
 
@@ -28,6 +29,12 @@ class Rights(Resource):
         return {"message": f"No Rights present in the system!"}, 404
 
 
+class ShowAccessRightsForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./users/forms/access_rights.html", title="Add Access Rights"), 200, headers)
+
+
 class SingleRight(Resource):
     def get(self, _id):
         right = RightsModel.find_by_id(_id)
@@ -47,38 +54,29 @@ class SingleRight(Resource):
         return {"message": f"No Right with {_id} is present in the system!"}, 404
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "right_name",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "description",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
+        right_name = ""
+        description = ""
 
-        data = parser.parse_args()
+        if request.method == "POST":
+            right_name = request.form.get("right_name")
+            description = request.form.get("description")
 
-        right = RightsModel.find_by_name(data["right_name"])
+        right = RightsModel.find_by_name(right_name)
 
         if right:
             return (
                 {
-                    "message": f"Right {data['right_name']} is already present in the system!"
+                    "message": f"Right {right_name} is already present in the system!"
                 },
                 400,
             )
 
         new_right = RightsModel(
-            None, data["right_name"], data["description"], dt.now(), None
+            None, right_name, description, dt.now(), None
         )
 
         new_right.save_to_database()
-        new_right_added = RightsModel.find_by_name(data["right_name"])
+        new_right_added = RightsModel.find_by_name(right_name)
 
         return (
             {
