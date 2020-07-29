@@ -296,32 +296,32 @@ class SingleUser(Resource):
         return {"message": f"User with id {_id} does not exist in the system!"}, 401
 
 
+class ShowChangePasswordForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("change-password.html",
+                                             title="Change Your Password",),
+                             200, headers)
+
+
 # This resource will be called when the user will want to change his password
 class UserCredentials(Resource):
-    def put(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "email_address", type=str, required=True, help="This is a required filed"
-        )
-        parser.add_argument(
-            "password", type=str, required=True, help="This is mandatory field"
-        )
-        parser.add_argument(
-            "new_password", type=str, required=True, help="This is a required filed"
-        )
-        parser.add_argument(
-            "confirm_new_password",
-            type=str,
-            required=True,
-            help="This is mandatory field",
-        )
+    def post(self):
+        email_address = ""
+        password = ""
+        new_password = ""
+        confirm_new_password = ""
 
-        user_data = parser.parse_args()
+        if request.method == "POST":
+            email_address = request.form.get("email_address")
+            password = request.form.get("password")
+            new_password = request.form.get("new_password")
+            confirm_new_password = request.form.get("confirm_new_password")
 
-        user_credentials_from_db = CredentialsModel.get_credential_by_email_address(user_data['email_address'])
-        if user_credentials_from_db and user_credentials_from_db.password == user_data['password']:
-            if user_data['new_password'] == user_data['confirm_new_password']:
-                user_credentials_from_db.password = user_data['new_password']
+        user_credentials_from_db = CredentialsModel.get_credential_by_email_address(email_address)
+        if user_credentials_from_db and user_credentials_from_db.password == password:
+            if new_password == confirm_new_password:
+                user_credentials_from_db.password = new_password
                 user_credentials_from_db.save_to_database()
                 user = UsersModel.find_by_email_address(user_credentials_from_db.email_address)
 
@@ -330,31 +330,31 @@ class UserCredentials(Resource):
                     
                     Congratulations! Your password has been successfully updated
                     
-                    Your new password is {user_data['new_password']}
+                    Your new password is {new_password}
                     
                     Thanks & Regards
                     Vivekanand Seva Mandal DMS Communications
                 """
 
-                AutomaticEmail.send_email(user.email_address, "Password Changed Successfully", email_body)
+                # AutomaticEmail.send_email(user.email_address, "Password Changed Successfully", email_body)
 
-                return (
-                    {
-                        "message": f"The password was successfully updated!"
-                    },
-                    200
-                )
+                headers = {'Content-Type': 'text/html'}
+                return make_response(render_template("./users/password-changed.html",
+                                                     title="Password Changed Successfully",
+                                                     message="The password has been updated! successfully"),
+                                     200, headers)
 
-            return (
-                {
-                    "message": "New password and confirm new password do not match with each other!"
-                },
-                401
-            )
+            headers = {'Content-Type': 'text/html'}
+            return make_response(render_template("./users/password-changed.html",
+                                                 title="Password Change Failed",
+                                                 message="New Password and Confirm Password do not match with each other"),
+                                 200, headers)
 
-        return {
-                   "message": "Please enter valid credentials! Bad Request!"
-               }, 401
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./users/password-changed.html",
+                                             title="Password Change Failed",
+                                             message="Please enter the valid Credentials!"),
+                             401, headers)
 
 
 class UserLogin(Resource):
@@ -387,8 +387,8 @@ class UserLogin(Resource):
 
 
 class UserLogout(Resource):
-    @jwt_required
-    def post(self):
+    # @jwt_required
+    def get(self):
         # get_raw_jwt() is a dictionary which has a key 'jti' inside it!
         # The value of this 'jti' is specifically the access token which we have to log out!
         jti = get_raw_jwt()['jti']

@@ -60,10 +60,11 @@ from dms.resources.users.User import (
     UserCredentials,
     TokenRefresh,
     UserLogout,
+    ShowChangePasswordForm
 )
 
 # Imports from donor related Resources
-from dms.resources.donors.Donors import Donors, SingleDonor
+from dms.resources.donors.Donors import Donors, SingleDonor, ShowDonorsForm
 from dms.resources.donors.References import Reference, SingleReference, ShowReferenceForm
 from dms.resources.donors.States import State, SingleState
 from dms.resources.donors.Country import Country, SingleCountry
@@ -128,6 +129,7 @@ api.add_resource(Users, "/users")
 api.add_resource(ShowUsersForm, "/add%a%new%user")
 api.add_resource(SingleUser, "/users/<int:_id>", "/users")
 api.add_resource(UserCredentials, "/change%password")
+api.add_resource(ShowChangePasswordForm, "/show-change-password-form")
 
 api.add_resource(Projects, "/projects")
 api.add_resource(ShowProjectsForm, "/add%project")
@@ -156,6 +158,7 @@ api.add_resource(State, "/states")
 api.add_resource(SingleState, "/states/<int:_id>", "/states")
 
 api.add_resource(Donors, "/donors")
+api.add_resource(ShowDonorsForm, "/add-a-new-donor")
 api.add_resource(SingleDonor, "/donors/<int:_id>", "/donors")
 
 api.add_resource(Donation, "/donations")

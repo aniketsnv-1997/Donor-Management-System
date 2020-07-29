@@ -1,4 +1,5 @@
 from flask_restful import reqparse, Resource
+from flask import make_response, render_template
 from datetime import datetime as dt
 
 from dms.models.donors.DonorsModel import DonorsModel
@@ -41,6 +42,14 @@ class Donors(Resource):
             return {"donors": donors_list}, 200
 
         return {"message": "No Donors available in the system!"}, 404
+
+
+class ShowDonorsForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('./donors/forms/donor-registration-form.html',
+                                             title="Donor Registration Form"),
+                             200, headers)
 
 
 class SingleDonor(Resource):

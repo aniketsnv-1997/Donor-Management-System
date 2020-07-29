@@ -78,10 +78,10 @@ class SingleRole(Resource):
             new_role.save_to_database()
             new_role_added = RolesModel.find_by_name(role_name)
             headers = {'Content-Type': 'text/html'}
-            make_response(render_template('./users/view after add/new_role_added.html',
+            return make_response(render_template('./users/view after add/new_role_added.html',
                                                  role_name=new_role_added.role_name,
                                                  description=new_role_added.description), 201, headers)
-            return pdfkit.from_url("http://127.0.0.1:5000/add%role", "test.pdf")
+            # return pdfkit.from_url("http://127.0.0.1:5000/add%role", "test.pdf")
 
     def delete(self, _id):
         role = RolesModel.find_by_id(_id)

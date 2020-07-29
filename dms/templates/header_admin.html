@@ -23,6 +23,24 @@
 
     <body>
         <div class="bg-light">
+            <div class="dropdown p-2 d-flex justify-content-md-end col-lg-12" style="position: absolute;">
+                <button class="btn btn-secondary dropdown-toggle text-right" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Hello {{user}}!
+                </button>
+
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <li class="dropdown-submenu">
+                        <a class="dropdown-item" tabindex="-1" href="{{ url_for("showchangepasswordform") }}">Change Password</a>
+                    </li>
+
+                    <li class="dropdown-submenu">
+                        <a class="dropdown-item" tabindex="-1" href="{{ url_for("userlogout") }}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-light">
             <div class="container-fluid">
                 <div class="text-center bg-light p-1" style="color:orange">
                     <h1>
@@ -34,16 +52,10 @@
 
                 <div class=" text-center bg-light p-1" style="color:orange">
                     <h2>
-            	        <p>
-                	        <b>Donor Management System</b>
-               	        </p>
+                        <p>
+                            <b>Donor Management System</b>
+                        </p>
                     </h2>
-
-                    <h5 class="" style="margin-left: 1000px;">
-            	        <p>
-                	        <b>Hello {{user}}!</b>
-               	        </p>
-                    </h5>
                 </div>
             </div>
         </div>
@@ -148,7 +160,7 @@
                                     </li>
 
                                     <li class="dropdown">
-                                        <a class="dropdown-item" href="#">Add</a>
+                                        <a class="dropdown-item" href="{{ url_for("showdonorsform") }}">Add</a>
                                     </li>
                                 </ul>
                         </li>
