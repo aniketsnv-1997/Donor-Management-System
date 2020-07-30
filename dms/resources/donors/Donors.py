@@ -1,4 +1,4 @@
-from flask_restful import reqparse, Resource
+from flask_restful import Resource, request
 from flask import make_response, render_template
 from datetime import datetime as dt
 
@@ -87,8 +87,27 @@ class SingleDonor(Resource):
         return {"message": f"No donor with id {_id} available in the system!"}, 404
 
     def post(self):
-        parser = reqparse.RequestParser()
+        name = ""
+        email_address = ""
+        gender = ""
+        date_f_birth = ""
+        date_of_anniversary = ""
+        pan = ""
+        uid = ""
+        country_code = ""
+        phone_number = ""
+        reference_id = 0
+        referrer_name = ""
+        other_reference = ""
+        address_line_1 = ""
+        address_line_2 = ""
+        city = ""
+        state = ""
+        country = ""
+        pincode = ""
 
+        if request.method == "POST":
+            
         parser.add_argument(
             "name",
             type=str,
