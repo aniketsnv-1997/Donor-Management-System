@@ -1,4 +1,4 @@
-from flask_restful import Resource, request
+from flask_restful import Resource, request, reqparse
 from flask import make_response, render_template
 from datetime import datetime as dt
 
@@ -90,7 +90,7 @@ class SingleDonor(Resource):
         name = ""
         email_address = ""
         gender = ""
-        date_f_birth = ""
+        date_of_birth = ""
         date_of_anniversary = ""
         pan = ""
         uid = ""
@@ -102,186 +102,128 @@ class SingleDonor(Resource):
         address_line_1 = ""
         address_line_2 = ""
         city = ""
-        state = ""
-        country = ""
+        state_id = ""
+        country_id = ""
         pincode = ""
 
         if request.method == "POST":
-            
-        parser.add_argument(
-            "name",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "email_address",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "gender",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "date_of_birth",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "date_of_anniversary",
-            type=str,
-            required=True,
-            help="This is mandatory field to be filled",
-        )
-        parser.add_argument(
-            "pan",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "uid",
-            type=int,
-            required=True,
-            help="This is a mandatory value to be filled",
-        )
-        parser.add_argument(
-            "country_code",
-            type=int,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "phone_number",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "reference",
-            type=int,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "other_reference",
-            type=str,
-            required=False,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "referrer_name",
-            type=str,
-            required=False,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "address_line_1",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "address_line_2",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "city",
-            type=str,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "state",
-            type=int,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "country",
-            type=int,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-        parser.add_argument(
-            "pincode",
-            type=int,
-            required=True,
-            help="This is a mandatory field to be filled",
-        )
-
-        data = parser.parse_args()
+            name = request.form.get("name")
+            email_address = request.form.get("email_address")
+            gender = request.form.get("optradio")
+            date_of_birth = request.form.get("date_of_birth")
+            date_of_anniversary = request.form.get("date_of_anniversary")
+            pan = request.form.get("pan")
+            uid = request.form.get("aadhar")
+            country_code = request.form.get("country_code")
+            phone_number = request.form.get("phone_number")
+            reference_id = request.form.get("reference_id")
+            referrer_name = request.form.get("referrer_name")
+            other_reference = request.form.get("other_reference")
+            address_line_1 = request.form.get("address_line_1")
+            address_line_2 = request.form.get("address_line_2")
+            city = request.form.get("city")
+            state_id = request.form.get("state")
+            country_id = request.form.get("country")
+            pincode = request.form.get("pincode")
 
         # To convert the date received in string format from json request to DATE format
-        date_of_birth = dt.strptime(data["date_of_birth"], "%Y-%m-%d")
-        date_of_anniversary = dt.strptime(data["date_of_anniversary"], "%Y-%m-%d")
+        date_of_birth = dt.strptime(date_of_birth, "%Y-%m-%d")
+        date_of_anniversary = dt.strptime(date_of_anniversary, "%Y-%m-%d")
 
-        if DonorsModel.find_by_name(data["name"]):
+        if DonorsModel.find_by_name(name):
             return (
-                {"message": f"Donor {data['name']} is already present in the system!"},
+                {"message": f"Donor {name} is already present in the system!"},
                 400,
             )
 
-        new_donor = DonorsModel(
-            None,
-            data["name"],
-            data["email_address"],
-            data["gender"],
-            date_of_birth,
-            date_of_anniversary,
-            data["pan"],
-            data["uid"],
-            data["country_code"],
-            data["phone_number"],
-            data["reference"],
-            data["other_reference"],
-            data["referrer_name"],
-            data["address_line_1"],
-            data["address_line_2"],
-            data["city"],
-            data["state"],
-            data["country"],
-            data["pincode"],
-            dt.now(),
-            None,
-        )
+        # Check if "referrer_name" is not NONE
+        elif referrer_name is not None:
+            new_donor = DonorsModel(
+                None,
+                name,
+                email_address,
+                gender,
+                date_of_birth,
+                date_of_anniversary,
+                pan,
+                uid,
+                country_code,
+                phone_number,
+                reference_id,
+                referrer_name,
+                None,
+                address_line_1,
+                address_line_2,
+                city,
+                state_id,
+                country_id,
+                pincode,
+                dt.now(),
+                None,
+            )
+
+        # Check if "other_reference" is not NONE
+        elif other_reference is not None:
+            new_donor = DonorsModel(
+                None,
+                name,
+                email_address,
+                gender,
+                date_of_birth,
+                date_of_anniversary,
+                pan,
+                uid,
+                country_code,
+                phone_number,
+                reference_id,
+                None,
+                other_reference,
+                address_line_1,
+                address_line_2,
+                city,
+                state_id,
+                country_id,
+                pincode,
+                dt.now(),
+                None,
+            )
+
+        # If both of the above conditions are False, execute this block
+        else:
+            new_donor = DonorsModel(
+                None,
+                name,
+                email_address,
+                gender,
+                date_of_birth,
+                date_of_anniversary,
+                pan,
+                uid,
+                country_code,
+                phone_number,
+                reference_id,
+                None,
+                None,
+                address_line_1,
+                address_line_2,
+                city,
+                state_id,
+                country_id,
+                pincode,
+                dt.now(),
+                None,
+            )
 
         new_donor.save_to_database()
 
-        new_donor_added = DonorsModel.find_by_name(data["name"])
-        return (
-            {
-                "id": new_donor_added.id,
-                "name": new_donor_added.name,
-                "email_address": new_donor_added.email_address,
-                "gender": new_donor_added.gender,
-                "date_of_birth": str(new_donor_added.date_of_birth),
-                "date_of_anniversary": str(new_donor_added.date_of_anniversary),
-                "dpan number": new_donor_added.pan,
-                "UID": new_donor_added.uid,
-                "country_code": new_donor_added.country_code,
-                "phone_number": new_donor_added.phone_number,
-                "reference_id": new_donor_added.reference_id,
-                "other_reference": new_donor_added.other_reference,
-                "referrer_name": new_donor_added.referrer_name,
-                "address_line_1": new_donor_added.address_line_1,
-                "address_line_2": new_donor_added.address_line_2,
-                "city": new_donor_added.city,
-                "state_id": new_donor_added.state_id,
-                "country_id": new_donor_added.country_id,
-                "pincode": new_donor_added.pincode,
-                "create_date": str(new_donor_added.create_date),
-                "update_date": str(new_donor_added.update_date),
-            },
-            201,
-        )
+        new_donor_added = DonorsModel.find_by_name(name)
+
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./donations/donor-added.html",
+                                             title="Donor Added Successfully!",
+                                             message="The donor has been successfully added into the system",
+                                             donor=new_donor_added),
+                             200, headers)
 
     def delete(self, _id):
         donor = DonorsModel.find_by_id(_id)

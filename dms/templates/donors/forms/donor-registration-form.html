@@ -72,12 +72,12 @@
                             <div class="row">
                                 <div class="col-sm p-2">
                                     <label for="date "><b>Date of Birth: </b></label><br>
-                                    <input type="date" id="date" name="date"> <br><br>
+                                    <input type="date" id="date" name="date_of_birth"> <br><br>
                                 </div>
 
                                 <div class="col-sm p-2">
                                     <label for="date "><b>Date of anniversary: </b></label><br>
-                                    <input type="date" id="date" name="date"><br><br>
+                                    <input type="date" id="date" name="date_of_anniversary"><br><br>
                                 </div>
                             </div>
 
@@ -90,7 +90,7 @@
 
                                 <div class="col-sm p-2">
                                     <label for="aadhar"><b>Addhar card Number:</b></label>
-                                    <input type="text" placeholder="Enter Addhar card number" name="addhar" id="addhar" minlength="16" required>
+                                    <input type="text" placeholder="Enter Addhar card number" name="aadhar" id="addhar" minlength="16" required>
                                 </div>
                             </div>
 
@@ -99,7 +99,7 @@
                                     <label for="sel1"><b>Country Code:</b></label>
 
                                     <!-- country codes (ISO 3166) and Dial codes. -->
-                                    <select class="form-control" name="countryCode" id="">
+                                    <select class="form-control" name="country_code" id="">
                                         <option data-countryCode="GB" value="44" Selected>UK (+44)</option>
                                         <option data-countryCode="US" value="1">USA (+1)</option>
                                         <optgroup label="Other countries">
@@ -323,7 +323,7 @@
 
                                 <div class="col-sm p-2">
                                     <label for="phone-no"><b>Phone Number:</b></label>
-                                    <input type="tel" placeholder="Enter phone number" pattern="^\d{10}$" name="phone" id="phone" required>
+                                    <input type="tel" placeholder="Enter phone number" pattern="^\d{10}$" name="phone_number" id="phone" required>
                                 </div>
                             </div>
                         </div>
@@ -332,7 +332,7 @@
                         <div class="col-lg-5">
                             <div class="form-group" id="dropdown">
                                 <label for="sel1"><b>Reference:</b></label>
-                                    <select class="form-control" id="reference" type="Reference" name="Reference" required>
+                                    <select class="form-control" id="reference" type="Reference" name="reference_id" required>
                                         <option>Facebook</option>
                                         <option>Whatsapp</option>
                                         <option>Instagram</option>
@@ -345,12 +345,12 @@
                             <div class="row">
                                     <div class="col-sm p-2" id="referrer"  hidden="hidden">
                                         <label for="referrer"><b>Referrer Name:</b></label>
-                                        <input type="text" placeholder="Enter Referrer Name" name="referrer"  >
+                                        <input type="text" placeholder="Enter Referrer Name" name="referrer_name"  >
                                     </div>
 
                                 <div class="col-sm p-2" id="Other-Reference" hidden="hidden">
                                     <label for="other-reference" ><b>Other Reference:</b></label>
-                                    <input type="text" placeholder="Enter Other Reference Name" name="other-reference"  >
+                                    <input type="text" placeholder="Enter Other Reference Name" name="other_reference"  >
                                 </div>
                             </div>
 
@@ -383,24 +383,24 @@
                             <div class="row">
                                 <div class="col-sm p-2">
                                     <label for="phone-no"><b>City:</b></label>
-                                    <input type="text" placeholder="Enter Your City" name="City" id="City" required>
+                                    <input type="text" placeholder="Enter Your City" name="city" id="City" required>
                                 </div>
 
                                 <div class="col-sm p-2">
                                     <label for="phone-no"><b>State:</b></label>
-                                    <input type="text" placeholder="Enter Your State" name="State" id="State" required>
+                                    <input type="text" placeholder="Enter Your State" name="state" id="State" required>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-sm p-2">
                                     <label for="phone-no"><b>Country:</b></label>
-                                    <input type="text" placeholder="Enter Your Country" name="Country" id="Country" required>
+                                    <input type="text" placeholder="Enter Your Country" name="country" id="Country" required>
                                 </div>
 
                                 <div class="col-sm p-2">
                                     <label for="phone-no"><b>Pin Code:</b></label>
-                                    <input type="text" placeholder="Enter Your Pin code" name="Pin" id="Pin" required>
+                                    <input type="text" placeholder="Enter Your Pin code" name="pincode" id="Pin" required>
                                 </div>
                             </div>
                         </div>

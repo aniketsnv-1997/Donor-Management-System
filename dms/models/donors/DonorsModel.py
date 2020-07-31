@@ -12,7 +12,7 @@ class DonorsModel(db.Model):
     email_address = db.Column(db.String(50), unique=True, nullable=False)
     gender = db.Column(db.String(10), unique=False, nullable=False)
     date_of_birth = db.Column(db.Date, unique=False, nullable=False)
-    date_of_anniversary = db.Column(db.Date, unique=False, nullable=False)
+    date_of_anniversary = db.Column(db.Date, unique=False, nullable=True)
     pan = db.Column(db.String(10), unique=True, nullable=False)
     uid = db.Column(db.Integer, unique=True, nullable=False)
     country_code = db.Column(db.Integer, unique=False, nullable=False)
@@ -20,10 +20,10 @@ class DonorsModel(db.Model):
     reference_id = db.Column(
         db.Integer, db.ForeignKey("references.id"), unique=False, nullable=False
     )
+    referrer_name = db.Column(db.String(20), unique=False, nullable=True)
     other_reference = db.Column(db.String(20), unique=False, nullable=True)
-    referrer_name = db.Column(db.String(20), nullable=True, unique=False)
     address_line_1 = db.Column(db.String(50), nullable=False, unique=False)
-    address_line_2 = db.Column(db.String(50), nullable=True, unique=False)
+    address_line_2 = db.Column(db.String(50), nullable=False, unique=False)
     city = db.Column(db.String(30), unique=False, nullable=False)
     state_id = db.Column(
         db.Integer, db.ForeignKey("states.id"), unique=False, nullable=False

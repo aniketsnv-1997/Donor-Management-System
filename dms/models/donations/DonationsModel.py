@@ -7,7 +7,7 @@ class DonationsModel(db.Model):
     __tablename__ = "donations"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(30), nullable=False, unique=False)
+    title = db.Column(db.String(50), nullable=False, unique=False)
     date_of_donation = db.Column(db.DateTime, unique=False, nullable=False)
     mode_id = db.Column(
         db.Integer, db.ForeignKey("modes_of_donation.id"), nullable=False, unique=False

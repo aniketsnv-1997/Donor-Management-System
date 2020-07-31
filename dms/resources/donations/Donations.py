@@ -1,3 +1,4 @@
+from flask import make_response, render_template
 from werkzeug.datastructures import MultiDict
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
@@ -34,6 +35,14 @@ class Donation(Resource):
 
             return {"donations": donations_list}, 200
         return {"message": "No donations present in the system"}, 200
+
+
+class ShowDonationsForm(Resource):
+    def get(self):
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("./donations/forms/add_donation.html",
+                                             title="Add a Donation",),
+                             200, headers)
 
 
 class SingleDonation(Resource):

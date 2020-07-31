@@ -1,0 +1,35 @@
+{% extends 'header_admin.html' %}
+
+{% block content %}
+<!doctype html>
+    {{ super() }}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{{ title }}</title>
+        </head>
+
+        <body>
+            <div id="header"></div>
+            <div class="container-fluid" style="color: orange;">
+                {% if message %}
+                    <h3 class="text-center text-justify p-3">{{message}}</h3>
+
+                {% else %}
+                    <h3 class="text-center text-justify p-3">{{message}}</h3>
+                    <h4 class="text-center text-justify">Name: {{donor.name}}</h4>
+                    <h4 class="text-center text-justify">Email Address: {{donor.email_address}}</h4>
+                    <h4 class="text-center text-justify">Pan: {{donor.pan}}</h4>
+                    <h4 class="text-center text-justify">Uid: {{donor.uid}}</h4>
+                    <h4 class="text-center text-justify">Date of Birth: {{donor.date_of_birth}}</h4>
+                    <h4 class="text-center text-justify">Date of Anniversary: {{donor.date_of_anniversary}}</h4>
+                    <h4 class="text-center text-justify">Phone Number: {{donor.phone_number}}</h4>
+    {#                <h4 class="text-center text-justify">Type:XYZ</h4>#}
+                {% endif %}
+
+            </div>
+        </body>
+    </html>
+{% endblock %}

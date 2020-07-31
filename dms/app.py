@@ -70,7 +70,7 @@ from dms.resources.donors.States import State, SingleState
 from dms.resources.donors.Country import Country, SingleCountry
 
 # Imports from donations related Resources
-from dms.resources.donations.Donations import Donation, SingleDonation
+from dms.resources.donations.Donations import Donation, SingleDonation, ShowDonationsForm
 from dms.resources.donations.KindDonations import KindDonations, SingleKindDonation
 from dms.resources.donations.Modes import Modes, SingleMode, ShowDonationModesForm
 
@@ -162,6 +162,7 @@ api.add_resource(ShowDonorsForm, "/add-a-new-donor")
 api.add_resource(SingleDonor, "/donors/<int:_id>", "/donors")
 
 api.add_resource(Donation, "/donations")
+api.add_resource(ShowDonationsForm, "/add-a-new-donation")
 api.add_resource(SingleDonation, "/donations/<int:_id>", "/donations")
 
 api.add_resource(KindDonations, "/kind_donations")
