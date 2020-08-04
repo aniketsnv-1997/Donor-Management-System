@@ -1,5 +1,5 @@
 from flask_restful import reqparse, Resource
-from flask import make_response, render_template
+from flask import make_response, render_template, request
 from datetime import datetime as dt
 
 from dms.models.donors.ReferencesModel import ReferenceModel
@@ -30,7 +30,7 @@ class Reference(Resource):
 class ShowReferenceForm(Resource):
     def get(self):
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template("add_references.html", title="Add Reference"), 200, headers)
+        return make_response(render_template("./donors/forms/add_references.html", title="Add Reference"), 200, headers)
 
 
 class SingleReference(Resource):
@@ -54,25 +54,23 @@ class SingleReference(Resource):
         )
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument(
-            "reference_name", type=str, required=True, help="This is a mandatory field!"
-        )
+        reference_name = ""
 
-        data = parser.parse_args()
+        if request.method == "POST":
+            reference_name = request.form.get("reference_name")
 
-        if ReferenceModel.find_by_name(data["reference_name"]):
+        if ReferenceModel.find_by_name(reference_name):
             return (
                 {
-                    "message": f"Reference {data['reference_name']} is already present in the system!"
+                    "message": f"Reference {reference_name} is already present in the system!"
                 },
                 400,
             )
 
-        new_reference = ReferenceModel(None, data["reference_name"], dt.now(), None)
+        new_reference = ReferenceModel(None, reference_name, dt.now(), None)
         new_reference.save_to_database()
 
-        new_reference_added = ReferenceModel.find_by_name(data["reference_name"])
+        new_reference_added = ReferenceModel.find_by_name(reference_name)
 
         return (
             {

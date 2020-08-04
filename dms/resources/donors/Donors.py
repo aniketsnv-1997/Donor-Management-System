@@ -3,6 +3,7 @@ from flask import make_response, render_template
 from datetime import datetime as dt
 
 from dms.models.donors.DonorsModel import DonorsModel
+from dms.models.donors.ReferencesModel import ReferenceModel
 
 
 class Donors(Resource):
@@ -48,7 +49,8 @@ class ShowDonorsForm(Resource):
     def get(self):
         headers = {'Content-Type': 'text/html'}
         return make_response(render_template('./donors/forms/donor-registration-form.html',
-                                             title="Donor Registration Form"),
+                                             title="Donor Registration Form",
+                                             references=ReferenceModel.get_all_references()),
                              200, headers)
 
 
@@ -102,14 +104,14 @@ class SingleDonor(Resource):
         address_line_1 = ""
         address_line_2 = ""
         city = ""
-        state_id = ""
-        country_id = ""
+        state = ""
+        country = ""
         pincode = ""
 
         if request.method == "POST":
             name = request.form.get("name")
             email_address = request.form.get("email_address")
-            gender = request.form.get("optradio")
+            gender = request.form.get("gender")
             date_of_birth = request.form.get("date_of_birth")
             date_of_anniversary = request.form.get("date_of_anniversary")
             pan = request.form.get("pan")
@@ -122,8 +124,8 @@ class SingleDonor(Resource):
             address_line_1 = request.form.get("address_line_1")
             address_line_2 = request.form.get("address_line_2")
             city = request.form.get("city")
-            state_id = request.form.get("state")
-            country_id = request.form.get("country")
+            state = request.form.get("state")
+            country = request.form.get("country")
             pincode = request.form.get("pincode")
 
         # To convert the date received in string format from json request to DATE format
@@ -151,15 +153,13 @@ class SingleDonor(Resource):
                 phone_number,
                 reference_id,
                 referrer_name,
-                None,
                 address_line_1,
                 address_line_2,
                 city,
-                state_id,
-                country_id,
+                state,
+                country,
                 pincode,
                 dt.now(),
-                None,
             )
 
         # Check if "other_reference" is not NONE
@@ -176,16 +176,14 @@ class SingleDonor(Resource):
                 country_code,
                 phone_number,
                 reference_id,
-                None,
                 other_reference,
                 address_line_1,
                 address_line_2,
                 city,
-                state_id,
-                country_id,
+                state,
+                country,
                 pincode,
                 dt.now(),
-                None,
             )
 
         # If both of the above conditions are False, execute this block
@@ -202,16 +200,13 @@ class SingleDonor(Resource):
                 country_code,
                 phone_number,
                 reference_id,
-                None,
-                None,
                 address_line_1,
                 address_line_2,
                 city,
-                state_id,
-                country_id,
+                state,
+                country,
                 pincode,
                 dt.now(),
-                None,
             )
 
         new_donor.save_to_database()
@@ -331,7 +326,7 @@ class SingleDonor(Resource):
             donor.state = data["state"]
             data.country = data["country"]
             data.pincode = data["pincode"]
-            donor.update_date = dt.now()
+            # donor.update_date = dt.now()
 
             DonorsModel.commit_to_database()
 
@@ -358,7 +353,7 @@ class SingleDonor(Resource):
                     "country_id": updated_donor.country_id,
                     "pincode": updated_donor.pincode,
                     "create_date": str(updated_donor.create_date),
-                    "update_date": str(updated_donor.update_date),
+                    # "update_date": str(updated_donor.update_date),
                 },
                 201,
             )

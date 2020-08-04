@@ -1,3 +1,4 @@
+pdfkit
 requests
 alembic==1.4.2
 click==7.1.2

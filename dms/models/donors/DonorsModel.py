@@ -1,6 +1,5 @@
 from dms.app import db
-from .StatesModel import StateModel
-from .CountryModel import CountryModel
+from datetime import datetime as dt
 from ..donations.DonationsModel import DonationsModel
 
 
@@ -8,9 +7,9 @@ class DonorsModel(db.Model):
     __tablename__ = "donors"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False, unique=False)
-    email_address = db.Column(db.String(50), unique=True, nullable=False)
-    gender = db.Column(db.String(10), unique=False, nullable=False)
+    name = db.Column(db.String(20), unique=False, nullable=False)
+    email_address = db.Column(db.String(50), unique=True, nullable=False, )
+    gender = db.Column(db.String(6), unique=False, nullable=False, )
     date_of_birth = db.Column(db.Date, unique=False, nullable=False)
     date_of_anniversary = db.Column(db.Date, unique=False, nullable=True)
     pan = db.Column(db.String(10), unique=True, nullable=False)
@@ -24,19 +23,13 @@ class DonorsModel(db.Model):
     other_reference = db.Column(db.String(20), unique=False, nullable=True)
     address_line_1 = db.Column(db.String(50), nullable=False, unique=False)
     address_line_2 = db.Column(db.String(50), nullable=False, unique=False)
-    city = db.Column(db.String(30), unique=False, nullable=False)
-    state_id = db.Column(
-        db.Integer, db.ForeignKey("states.id"), unique=False, nullable=False
-    )
-    country_id = db.Column(
-        db.Integer, db.ForeignKey("country.id"), unique=False, nullable=False
-    )
-    pincode = db.Column(db.Integer, unique=False, nullable=False)
-    create_date = db.Column(db.DateTime, unique=False, nullable=False)
-    update_date = db.Column(db.DateTime, unique=False, nullable=False)
+    city = db.Column(db.String(30), nullable=False, unique=False)
+    state = db.Column(db.String(20), nullable=False, unique=False)
+    country = db.Column(db.String(20), nullable=False, unique=False)
+    pincode = db.Column(db.BigInteger, nullable=False, unique=False)
+    create_date = db.Column(db.DateTime, nullable=False, unique=False)
+    # update_date = db.Column(db.DateTime, nullable=True, unique=False, default=dt.now())
 
-    # state = db.relationship('StatesModel', backref='donors')
-    # country = db.relationship('CountryModel', backref='donors')
     donations_details = db.relationship("DonationsModel", backref="donors")
 
     def __init__(
@@ -57,11 +50,11 @@ class DonorsModel(db.Model):
         address_line_1: str,
         address_line_2: str,
         city: str,
-        state: int,
-        country: int,
+        state: str,
+        country: str,
         pincode: int,
         create_date,
-        update_date,
+        # update_date,
     ):
         self.id = _id
         self.name = name
@@ -82,8 +75,10 @@ class DonorsModel(db.Model):
         self.state = state
         self.country = country
         self.pincode = pincode
-        self.create_Date = create_date
-        self.update_date = update_date
+        self.create_date = create_date
+
+        # if update_date is None:
+        #     self.update_date = None
 
     @classmethod
     def find_by_email_address(cls, email_address: str):

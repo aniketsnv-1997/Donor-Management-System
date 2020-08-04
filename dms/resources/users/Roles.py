@@ -1,7 +1,7 @@
-from flask_restful import request, Resource
-from flask import make_response, render_template
 from datetime import datetime as dt
-import pdfkit
+
+from flask import make_response, render_template
+from flask_restful import request, Resource
 
 from dms.models.users.RolesModel import RolesModel
 

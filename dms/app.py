@@ -7,8 +7,8 @@ from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/dms"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dms.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/dms"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dms.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["PROPAGATE_EXCEPTIONS"] = True  # This line enables the Flask app to identify errors and exceptions
 # related to FlaskJWT and then report them accordingly
@@ -66,8 +66,8 @@ from dms.resources.users.User import (
 # Imports from donor related Resources
 from dms.resources.donors.Donors import Donors, SingleDonor, ShowDonorsForm
 from dms.resources.donors.References import Reference, SingleReference, ShowReferenceForm
-from dms.resources.donors.States import State, SingleState
-from dms.resources.donors.Country import Country, SingleCountry
+# from dms.resources.donors.States import State, SingleState
+# from dms.resources.donors.Country import Country, SingleCountry
 
 # Imports from donations related Resources
 from dms.resources.donations.Donations import Donation, SingleDonation, ShowDonationsForm
@@ -126,7 +126,7 @@ def revoked_token_callback():
 api.add_resource(HomePage, "/")
 
 api.add_resource(Users, "/users")
-api.add_resource(ShowUsersForm, "/add%a%new%user")
+api.add_resource(ShowUsersForm, "/add-a-new-user")
 api.add_resource(SingleUser, "/users/<int:_id>", "/users")
 api.add_resource(UserCredentials, "/change%password")
 api.add_resource(ShowChangePasswordForm, "/show-change-password-form")
@@ -147,15 +147,9 @@ api.add_resource(Types, "/types")
 api.add_resource(ShowTypesForm, "/add%project%type")
 api.add_resource(SingleType, "/types/<int:_id>", "/types")
 
-api.add_resource(Country, "/country")
-api.add_resource(SingleCountry, "/country/<int:_id>", "/country")
-
 api.add_resource(Reference, "/references")
-api.add_resource(ShowReferenceForm, "/add%a%new%reference")
+api.add_resource(ShowReferenceForm, "/add-a-new-reference")
 api.add_resource(SingleReference, "/references/<int:_id>", "/references")
-
-api.add_resource(State, "/states")
-api.add_resource(SingleState, "/states/<int:_id>", "/states")
 
 api.add_resource(Donors, "/donors")
 api.add_resource(ShowDonorsForm, "/add-a-new-donor")

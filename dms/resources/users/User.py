@@ -1,9 +1,7 @@
 import traceback
-import pdfkit
-
-from flask import render_template, make_response, request, redirect, url_for
-from flask_restful import reqparse, Resource
 from datetime import datetime as dt
+
+from flask import render_template, make_response, request
 from flask_jwt_extended import (
     get_jwt_claims,
     create_access_token,
@@ -11,20 +9,17 @@ from flask_jwt_extended import (
     jwt_required,
     jwt_refresh_token_required,
     get_jwt_identity,
-    get_raw_jwt,
-    fresh_jwt_required,
-    get_jti)
-from flask_restful.representations import json
+    get_raw_jwt)
+from flask_restful import reqparse, Resource
 from werkzeug.security import safe_str_cmp
 
 from dms.email import AutomaticEmail, AutomaticEmailException
-from dms.models.users.RightsModel import RightsModel
-from dms.models.users.UsersModel import UsersModel
+from dms.logout import BLACKLIST
 from dms.models.users.CredentialsModel import CredentialsModel
 from dms.models.users.ProjectsModel import ProjectsModel
+from dms.models.users.RightsModel import RightsModel
 from dms.models.users.RolesModel import RolesModel
-from dms.logout import BLACKLIST
-from dms.app import ACCESS_EXPIRES, REFRESH_EXPIRES
+from dms.models.users.UsersModel import UsersModel
 
 logout_set = ()
 
@@ -52,11 +47,11 @@ class Users(Resource):
                     }
                 )
             headers = {'Content-Type': 'text/html'}
-            return make_response(render_template('users.html', title="VSM_DMS Users", user_list=users), 200, headers)
+            return make_response(render_template('./users/views/users.html', title="VSM_DMS Users", user_list=users), 200, headers)
             # return {"users": user_list}, 200
 
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('users.html', title="Users", user_list=users), 200, headers)
+        return make_response(render_template('./users/views/users.html', title="Users", user_list=users), 200, headers)
         # return {"message": "No users present in the system as of now"}, 404
 
 
