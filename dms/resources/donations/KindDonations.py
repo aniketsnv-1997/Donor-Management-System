@@ -1,7 +1,7 @@
 from flask_restful import reqparse, Resource
 from datetime import datetime as dt
 
-from dms.models.donations.KindDonationsModel import KindDonationModel
+from dms.models.donations.KindDonationsModel import KindDonationsModel
 from dms.models.donations.DonationsModel import DonationsModel
 
 

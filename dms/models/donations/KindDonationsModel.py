@@ -1,7 +1,7 @@
 from dms.app import db
 
 
-class KindDonationModel(db.Model):
+class KindDonationsModel(db.Model):
     __tablename__ = "kind_donations"
 
     id = db.Column(db.Integer, primary_key=True)

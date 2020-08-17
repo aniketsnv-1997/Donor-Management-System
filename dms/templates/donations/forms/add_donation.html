@@ -34,7 +34,7 @@
                     <!--Main Div-->
                     <div class="col-lg-5">
                         <label for="name"><b>Title:</b></label>
-                        <input type="text" placeholder="Enter the Title" name="title" id="title" required><br>
+                        <input type="text" placeholder="Enter the Title" name="donation_title" id="title" required><br>
 
                         <!--Date of Donation and mode in 1 row-->
                         <div class="row">
@@ -44,8 +44,8 @@
                             </div>
 
                             <div class="form-group col-sm" id="dropdown-mode">
-                                <label for="sel1"><b>Mode:</b></label>
-                                <select class="form-control" id="mode" type="mode" name="donation_mode" required>
+                                <label for="sel1"><b>Donation Mode:</b></label>
+                                <select class="form-control" id="mode" type="mode" name="donation_mode_id" required>
                                     <option value="">Select the mode!</option>
                                     <option value="1" >Cash</option>
                                     <option value="2">Cheque</option>
@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="form-group col-sm" id="dropdown-project">
                                 <label for="sel1"><b>Project:</b></label>
-                                <select class="form-control" id="project" type="project" name="project" required>
+                                <select class="form-control" id="project" type="project" name="project_id" required>
                                     <option value="">Select the project!</option>
                                     <option value="" >1</option>
                                     <option value="">2</option>
@@ -69,7 +69,7 @@
 
                             <div class="form-group col-sm" id="dropdown-donor">
                                 <label for="sel1"><b>Donor:</b></label>
-                                <select class="form-control" id="donor" type="donor" name="donor" required>
+                                <select class="form-control" id="donor" type="donor" name="donor_id" required>
                                     <option value="">Select Donor!</option>
                                     <option value="">1</option>
                                     <option value="">2</option>
@@ -84,12 +84,12 @@
                         <div class="row">
                             <div class="col-sm ">
                                 <label for="phone-no"><b>Cheque Number:</b></label>
-                                <input type="tel" placeholder="Enter Cheque number" name="cheque-no" id="cheque-no" required>
+                                <input type="tel" placeholder="Enter Cheque number" name="cheque_number" id="cheque-no" required>
                             </div>
 
                             <div class="col-sm ">
                                 <label for="name"><b>Donor Bank:</b></label>
-                                <input type="text" placeholder="Enter Bank Name" name="bank-name" id="bank-name" required><br>
+                                <input type="text" placeholder="Enter Bank Name" name="donor_bank" id="bank-name" required><br>
                             </div>
                         </div>
 
@@ -97,12 +97,12 @@
                         <div class="row">
                             <div class="col-sm ">
                                 <label for="date "><b>Cheque Date: </b></label><br>
-                                <input type="date" id="date" name="date"> <br><br>
+                                <input type="date" id="date" name="date_on_cheque"> <br><br>
                             </div>
 
                             <div class="col-sm ">
                                 <label for="date "><b>Date of Credit: </b></label><br>
-                                <input type="date" id="date" name="date"> <br><br>
+                                <input type="date" id="date" name="date_of_credit"> <br><br>
                             </div>
                         </div>
 
@@ -110,12 +110,12 @@
                         <div class="row">
                             <div class="col-sm ">
                                 <label for="phone-no"><b>Amount in Figures:</b></label>
-                                <input type="text" placeholder="Enter Amount in Figures" name="amt-figure" id="amt-figure" required>
+                                <input type="text" placeholder="Enter Amount in Figures" name="amount_in_figures" id="amt-figure" required>
                             </div>
 
                             <div class="col-sm ">
                                 <label for="name"><b>Amount in Words:</b></label>
-                                <input type="text" placeholder="Enter Amount in Words" name="amt-words" id="amt-words" required><br>
+                                <input type="text" placeholder="Enter Amount in Words" name="amount_in_words" id="amt-words" required><br>
                             </div>
                         </div>
                     </div>

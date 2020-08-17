@@ -112,9 +112,9 @@ class SingleUser(Resource):
             name = request.form.get("name")
             email_address = request.form.get("email_address")
             password = request.form.get("password")
-            role_id = request.form.get("role")
-            project_id = request.form.get("project")
-            rights_id = request.form.get("right")
+            role_id = request.form.get("role_id")
+            project_id = request.form.get("project_id")
+            rights_id = request.form.get("right_id")
 
         if UsersModel.find_by_email_address(email_address):
             message = f"The email address {email_address} is already " \

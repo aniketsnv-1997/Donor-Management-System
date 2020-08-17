@@ -128,23 +128,23 @@ api.add_resource(HomePage, "/")
 api.add_resource(Users, "/users")
 api.add_resource(ShowUsersForm, "/add-a-new-user")
 api.add_resource(SingleUser, "/users/<int:_id>", "/users")
-api.add_resource(UserCredentials, "/change%password")
+api.add_resource(UserCredentials, "/change-password")
 api.add_resource(ShowChangePasswordForm, "/show-change-password-form")
 
 api.add_resource(Projects, "/projects")
-api.add_resource(ShowProjectsForm, "/add%project")
+api.add_resource(ShowProjectsForm, "/add-a-new-project")
 api.add_resource(SingleProject, "/projects/<int:_id>", "/projects")
 
 api.add_resource(Roles, "/roles")
-api.add_resource(ShowRolesForm, "/add%role")
+api.add_resource(ShowRolesForm, "/add-a-new-role")
 api.add_resource(SingleRole, "/roles/<int:_id>", "/roles")
 
 api.add_resource(Rights, "/rights")
-api.add_resource(ShowAccessRightsForm, "/add%access%rights")
+api.add_resource(ShowAccessRightsForm, "/add-a-new-access-right")
 api.add_resource(SingleRight, "/rights/<int:_id>", "/rights")
 
 api.add_resource(Types, "/types")
-api.add_resource(ShowTypesForm, "/add%project%type")
+api.add_resource(ShowTypesForm, "/add-a-new-project-type")
 api.add_resource(SingleType, "/types/<int:_id>", "/types")
 
 api.add_resource(Reference, "/references")
@@ -163,7 +163,7 @@ api.add_resource(KindDonations, "/kind_donations")
 api.add_resource(SingleKindDonation, "/kind_donations/<int:id>")
 
 api.add_resource(Modes, "/modes")
-api.add_resource(ShowDonationModesForm, "/add%a%donation%mode")
+api.add_resource(ShowDonationModesForm, "/add-a-new-donation-mode")
 api.add_resource(SingleMode, "/modes/<int:_id>", "/modes")
 
 api.add_resource(UserLogin, "/login")

@@ -1,6 +1,7 @@
 from dms.app import db
-from .KindDonationsModel import KindDonationModel
+from .KindDonationsModel import KindDonationsModel
 from .ChequeDonationsModel import ChequeDonationsModel
+from .OnlineDonationsModel import OnlineDonationsModel
 
 
 class DonationsModel(db.Model):
@@ -22,11 +23,15 @@ class DonationsModel(db.Model):
     create_date = db.Column(db.DateTime, unique=False, nullable=False)
 
     kind_donations = db.relationship(
-        "KindDonationModel", backref="donation", lazy="dynamic"
+        "KindDonationsModel", backref="donation", lazy="dynamic"
     )
 
     cheque_donations = db.relationship(
         "ChequeDonationsModel", backref="donation", lazy="dynamic"
+    )
+
+    online_donations = db.relationship(
+        "OnlineDonationsModel", backref="donation", lazy="dynamic"
     )
 
     def __init__(
