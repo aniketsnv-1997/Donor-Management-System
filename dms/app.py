@@ -35,7 +35,6 @@ def create_db():
     db.create_all()
     print("DB Created Successfully")
 
-
 @app.before_first_request
 def db_creation_command():
     create_db()
