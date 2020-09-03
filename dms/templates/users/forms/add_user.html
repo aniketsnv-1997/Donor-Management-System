@@ -22,7 +22,7 @@
 {#                            <b>Add User</b>#}
 {#                        </h2>#}
 
-                        <form action="{{ url_for("singleuser") }}" method="post">
+                        <form action="{{ url_for('singleuser') }}" method="post">
                             <label for="name"><b>Name:</b></label>
                             <input type="text" placeholder="Enter Your Name" name="name" id="name" pattern="[A-Za-z]+" required>
 

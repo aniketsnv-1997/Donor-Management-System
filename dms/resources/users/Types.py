@@ -32,7 +32,7 @@ class Types(Resource):
 class ShowTypesForm(Resource):
     def get(self):
         headers = {'Content-Type': 'text/html'}
-        return make_response(render_template("add_types.html", title="Add Types"), 200, headers)
+        return make_response(render_template("./users/forms  /add_types.html", title="Add Types"), 200, headers)
 
 
 class SingleType(Resource):
