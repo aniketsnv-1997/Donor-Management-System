@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User View</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
+    <style>
+         @media(max-width: 480px){
+                .resp_heading{
+                font-size: 30px;
+                }
+
+                .resp_text{
+                font-size: 16px;
+                }
+
+                .resp_img{
+                    height: 60px;
+                    width: 60px;
+                    }
+            }
+    </style>
+</head>
+<body>
+    <!--User Details 1-->
+    <div class="container col-lg-6 col-md-6 bg-light mt-4 mb-4">
+        <div class="row d-flex justify-content-between border rounded">
+            <div class="text-center ml-3">
+                <div class="p-1 row">
+                    <i class="material-icons" style="font-size:25px;color:orange">person</i>
+                    <h5 class="resp_text">Saurav Shirwadkar</h5>
+                 </div>
+         
+                 <div class="p-1 row">
+                    <i class="material-icons" style="font-size:25px;color:orange">email</i>
+                    <h5 class="resp_text">saurav.shirwadkar@gmail.com</h5>
+                 </div>
+     
+                 <div class="p-1 row">
+                     <i class="material-icons" style="font-size:25px;color:orange">phone</i>
+                     <h5 class="resp_text">+91 8779384175</h5>
+                 </div>
+            </div>
+
+            <div class="p-2 ">
+              
+                <div class="text-center">
+                    <a type="button" href="" data-toggle="modal" data-target="#viewModal"><ion-icon name="eye-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+
+                <div class="text-center">
+                    <a type="button" href=""><ion-icon name="pencil-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+
+                <div class="text-center">
+                    <a type="button" href="" data-toggle="modal" data-target="#deleteModal"><ion-icon name="trash-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+              
+                
+              
+
+
+            </div>
+        </div>
+    </div>
+
+      <!--User Details 1-->
+    <div class="container col-lg-6 col-md-6 bg-light mt-4 mb-4">
+        <div class="row d-flex justify-content-between border rounded">
+            <div class="text-center ml-3">
+                <div class="p-1 row">
+                    <i class="material-icons" style="font-size:25px;color:orange">person</i>
+                    <h5 class="resp_text">Saurav Shirwadkar</h5>
+                 </div>
+         
+                 <div class="p-1 row">
+                    <i class="material-icons" style="font-size:25px;color:orange">email</i>
+                    <h5 class="resp_text">saurav.shirwadkar@gmail.com</h5>
+                 </div>
+     
+                 <div class="p-1 row">
+                     <i class="material-icons" style="font-size:25px;color:orange">phone</i>
+                     <h5 class="resp_text">+91 8779384175</h5>
+                 </div>
+            </div>
+
+            <div class="p-2">
+                <div class="text-center">
+                    <a type="button" href="" data-toggle="modal" data-target="#viewModal"><ion-icon name="eye-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+
+                <div class="text-center">
+                    <a type="button" href=""><ion-icon name="pencil-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+
+                <div class="text-center">
+                    <a type="button" href="" data-toggle="modal" data-target="#deleteModal"><ion-icon name="trash-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+              
+                
+              
+
+
+            </div>
+        </div>
+    </div>
+
+     <!--User Details 3-->
+     <div class="container col-lg-6 col-md-6 bg-light mt-4 mb-4">
+        <div class="row d-flex justify-content-around border rounded">
+            <div class="text-center">
+                <div class="p-1 row">
+                    <i class="material-icons" style="font-size:25px;color:orange">person</i>
+                    <h5 class="resp_text">Saurav Shirwadkar</h5>
+                 </div>
+         
+                 <div class="p-1 row">
+                    <i class="material-icons" style="font-size:25px;color:orange">email</i>
+                    <h5 class="resp_text">saurav.shirwadkar@gmail.com</h5>
+                 </div>
+     
+                 <div class="p-1 row">
+                     <i class="material-icons" style="font-size:25px;color:orange">phone</i>
+                     <h5 class="resp_text">+91 8779384175</h5>
+                 </div>
+            </div>
+
+            <div class="p-2">
+                <div class="text-center">
+                    <a type="button" href="" data-toggle="modal" data-target="#viewModal"><ion-icon name="eye-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+
+                <div class="text-center">
+                    <a type="button" href=""><ion-icon name="pencil-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+
+                <div class="text-center">
+                    <a type="button" href="" data-toggle="modal" data-target="#deleteModal"><ion-icon name="trash-outline" style="font-size: 25px; color: black;"></ion-icon></a>
+                </div>
+                
+              
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!--MODALS FOR VIEW AND DELETE-->
+              <!-- Modal for Delete-->
+              <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="color: orange;">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header lead ">
+                    <h5 class="modal-title resp_text" id="exampleModalLabel">Do you want to Delete the User.?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Delete</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!--Modal For View-->
+            <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="color: orange;">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel">User Details!</h5> 
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+
+                    <div class="modal-body lead resp_text">
+                        <div>
+                            <p class="text-center"><b>Name: Saurav Shirwadkar</b></p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <p><b>Email: XYZ@gmail.com</b></p>
+                            </div>
+                            <div class="col-sm">
+                                <p><b>Mobile No: 1234566789</b></p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <p><b>Role: XYZ</b></p>
+                            </div>
+                            <div class="col-sm">
+                                <p><b>Project: xyz</b></p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><b>Rights: xyz</b></p>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer" >
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+      
+
+    
+
+    
+    
+
+    
+
+<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+</body>
+</html>
